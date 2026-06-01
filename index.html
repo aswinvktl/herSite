@@ -89,15 +89,21 @@
   <!-- ========================================================
        SCREEN 3 — TIME
   ========================================================= -->
-  <section class="screen" data-screen="time">
-    <div class="card">
-      <h2>and what time works?</h2>
+  <section class="screen bg-spirited" data-screen="time">
+    <div class="day-wrap">
+      <h2 class="day-q">and what time?</h2>
       <div class="options">
-        <button class="opt" data-choice="time" data-value="Afternoon (~2pm)">Afternoon</button>
-        <button class="opt" data-choice="time" data-value="Evening (~6pm)">Evening</button>
-        <button class="opt" data-choice="time" data-value="Night (~8pm)">Night</button>
+        <button class="opt" data-choice="time" data-value="5pm">5pm</button>
+        <button class="opt" data-choice="time" data-value="6pm">6pm</button>
+        <button class="opt" data-choice="time" data-value="7pm">7pm</button>
       </div>
       <p class="reaction" id="timeReaction"></p>
+      <img class="day-react" id="timeReact"
+           src="resources/anthonySmacky.jpg" alt="" hidden />
+      <div>
+        <button class="btn btn-next" id="timeNext" hidden
+                data-action="goto" data-target="food">next →</button>
+      </div>
     </div>
   </section>
 

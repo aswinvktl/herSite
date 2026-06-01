@@ -184,12 +184,22 @@ document.querySelectorAll('[data-choice="day"]').forEach(btn => {
 });
 
 /* =============================================================
-   SCREEN 3 — TIME
+   SCREEN 3 — TIME  (all picks: same reaction + reveal next)
    ============================================================= */
+const timeReaction = document.getElementById("timeReaction");
+const timeReact = document.getElementById("timeReact");
+const timeNext = document.getElementById("timeNext");
+
 document.querySelectorAll('[data-choice="time"]').forEach(btn => {
   btn.addEventListener("click", () => {
     state.time = btn.dataset.value;
-    setTimeout(() => show("food"), 350);
+    timeReaction.textContent = "great choice again";
+    timeReact.hidden = false;
+    timeReact.classList.remove("animate__animated", "animate__zoomIn");
+    void timeReact.offsetWidth;
+    timeReact.classList.add("animate__animated", "animate__zoomIn");
+    timeNext.hidden = false;
+    updateNav();
   });
 });
 
