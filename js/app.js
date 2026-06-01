@@ -31,6 +31,9 @@ function show(name) {
   // post-yes sequence: img1 -> img2 -> video
   if (name === "afteryes") runYesSequence();
 
+  // reset the timeout/water-break screen so it replays
+  if (name === "timeout" && typeof resetTimeout === "function") resetTimeout();
+
   // keep nav arrows in sync (defined further down)
   if (typeof onScreenChange === "function") onScreenChange(name);
 }
@@ -204,20 +207,66 @@ document.querySelectorAll('[data-choice="time"]').forEach(btn => {
 });
 
 /* =============================================================
-   SCREEN 4 — FOOD  (+ "other" text field)
+   SCREEN 3b — TIMEOUT / WATER BREAK
+   stage1 (tap to continue) -> stage2 (10s countdown, skippable) -> food
+   ============================================================= */
+const timeoutStage1 = document.getElementById("timeoutStage1");
+const timeoutStage2 = document.getElementById("timeoutStage2");
+const waterCount = document.getElementById("waterCount");
+const waterSkip = document.getElementById("waterSkip");
+let waterTimer = null;
+
+// tap anywhere on stage 1 to go to the water break
+timeoutStage1.addEventListener("click", () => {
+  timeoutStage1.hidden = true;
+  timeoutStage2.hidden = false;
+  startWaterBreak();
+});
+
+function startWaterBreak() {
+  let n = 10;
+  waterCount.textContent = n;
+  clearInterval(waterTimer);
+  waterTimer = setInterval(() => {
+    n--;
+    waterCount.textContent = n;
+    if (n <= 0) {
+      clearInterval(waterTimer);
+      show("food");
+    }
+  }, 1000);
+}
+
+waterSkip.addEventListener("click", () => {
+  clearInterval(waterTimer);
+  show("food");
+});
+
+// reset the timeout screen each time it's shown (so back-nav replays it)
+function resetTimeout() {
+  clearInterval(waterTimer);
+  timeoutStage1.hidden = false;
+  timeoutStage2.hidden = true;
+  waterCount.textContent = "10";
+}
+
+/* =============================================================
+   SCREEN 4 — FOOD  (every pick: same "banging choice" reaction)
    ============================================================= */
 const foodOther = document.getElementById("foodOther");
 const foodReaction = document.getElementById("foodReaction");
+const foodReact = document.getElementById("foodReact");
 const foodNext = document.getElementById("foodNext");
 
-// Reaction lines per food option. Empty = no text shown.
-// Fill these in YOUR voice if you want a line, or leave "" for none.
-const foodReactions = {
-  "Ramen": "",
-  "Pho": "",
-  "Dumplings": "",
-  "Poke / rice bowl": "",
-};
+function foodChosen() {
+  foodReaction.textContent = "that's a banging choice. yes make me that";
+  foodReact.hidden = false;
+  foodReact.classList.remove("animate__animated", "animate__zoomIn");
+  void foodReact.offsetWidth;
+  foodReact.classList.add("animate__animated", "animate__zoomIn");
+  foodNext.hidden = false;
+  updateNav();
+}
 
 document.querySelectorAll('[data-choice="food"]').forEach(btn => {
   btn.addEventListener("click", () => {
@@ -226,22 +275,30 @@ document.querySelectorAll('[data-choice="food"]').forEach(btn => {
       foodOther.hidden = false;
       foodOther.focus();
       foodReaction.textContent = "";
+      foodReact.hidden = true;
       foodNext.hidden = true;
       state.food = null;
+      updateNav();
       return;
     }
     foodOther.hidden = true;
     state.food = val;
-    foodReaction.textContent = foodReactions[val] || "";
-    foodNext.hidden = false;
+    foodChosen();
   });
 });
 
-// typing in "other" sets the food + reveals next
+// typing in "other" sets the food + shows the same reaction once there's text
 foodOther.addEventListener("input", () => {
   const v = foodOther.value.trim();
   state.food = v || null;
-  foodNext.hidden = !v;
+  if (v) {
+    foodChosen();
+  } else {
+    foodReact.hidden = true;
+    foodNext.hidden = true;
+    foodReaction.textContent = "";
+    updateNav();
+  }
 });
 
 /* =============================================================
@@ -326,9 +383,9 @@ function renderQR() {
    (ask1) and last (summary). Forward is only allowed once the
    current step's required choice is made.
    ============================================================= */
-const ORDER = ["ask1","ask2","afteryes","date","time","food","addask","reasons","interested","summary"];
+const ORDER = ["ask1","ask2","afteryes","date","time","timeout","food","addask","reasons","interested","summary"];
 const NAV_HIDDEN_ON = ["ask1","summary"];           // no arrows here
-const NAV_NO_FORWARD = ["ask2"];                    // YES button advances these, not the arrow
+const NAV_NO_FORWARD = ["ask2","timeout"];          // these advance by their own controls
 
 // what each screen needs before forward is allowed (null = no gate)
 function forwardAllowed(screen) {

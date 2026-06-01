@@ -102,31 +102,56 @@
            src="resources/anthonySmacky.jpg" alt="" hidden />
       <div>
         <button class="btn btn-next" id="timeNext" hidden
-                data-action="goto" data-target="food">next →</button>
+                data-action="goto" data-target="timeout">next →</button>
       </div>
     </div>
   </section>
 
   <!-- ========================================================
-       SCREEN 4 — FOOD  ("what would you LIKE")
-       light / easy options + an "other" text field
+       SCREEN 3b — TIMEOUT / WATER BREAK (intermission)
   ========================================================= -->
-  <section class="screen" data-screen="food">
-    <div class="card">
-      <h2>what would you like to eat?</h2>
+  <section class="screen bg-spirited" data-screen="timeout">
+    <div class="day-wrap">
+      <!-- stage 1: Shaq timeout, tap to continue -->
+      <div id="timeoutStage1">
+        <img class="day-gif" id="shaqImg"
+             src="resources/shaq-timeout.jpg" alt="timeout" />
+        <h2 class="day-q">⏱️ TIMEOUT</h2>
+        <p class="reaction">tap to continue</p>
+      </div>
+
+      <!-- stage 2: water break countdown -->
+      <div id="timeoutStage2" hidden>
+        <h2 class="day-q">water break 💧</h2>
+        <p class="reaction"><span id="waterCount">10</span> seconds… hydrate.</p>
+        <!-- (cutesy JS bits go here later) -->
+        <button class="btn btn-next" id="waterSkip">skip →</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================
+       SCREEN 4 — FOOD  ("what would WE prefer")
+  ========================================================= -->
+  <section class="screen bg-spirited" data-screen="food">
+    <div class="day-wrap">
+      <img class="day-gif" id="foodGif"
+           src="resources/verycat-twitch-cat-twitch-emote-sticker-verycat-twitch-cat-t.gif" alt="" />
+      <h2 class="day-q">what would <em>we</em> prefer?</h2>
       <div class="options">
-        <!-- EDIT these to your real light/easy picks -->
-        <button class="opt" data-choice="food" data-value="Ramen">Ramen</button>
-        <button class="opt" data-choice="food" data-value="Pho">Pho</button>
-        <button class="opt" data-choice="food" data-value="Dumplings">Dumplings</button>
-        <button class="opt" data-choice="food" data-value="Poke / rice bowl">Poke bowl</button>
+        <button class="opt" data-choice="food" data-value="Italian">Italian</button>
+        <button class="opt" data-choice="food" data-value="Japanese">Japanese</button>
+        <button class="opt" data-choice="food" data-value="Mediterranean">Mediterranean</button>
         <button class="opt opt-other" data-choice="food" data-value="__other__">something else…</button>
       </div>
       <input type="text" id="foodOther" class="textfield" hidden
-             placeholder="go on then, what are you craving?" maxlength="80" />
+             placeholder="go on then, what are we craving?" maxlength="80" />
       <p class="reaction" id="foodReaction"></p>
-      <button class="btn btn-next" id="foodNext" hidden data-action="goto" data-target="addask">next →</button>
-      <!-- per-food memes live in memes/06-food -->
+      <img class="day-react" id="foodReact"
+           src="resources/75daf93cead7ed5e7df1a50352681188(3).jpg" alt="" hidden />
+      <div>
+        <button class="btn btn-next" id="foodNext" hidden data-action="goto" data-target="addask">next →</button>
+      </div>
     </div>
   </section>
 
