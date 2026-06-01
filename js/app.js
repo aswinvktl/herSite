@@ -26,6 +26,9 @@ function show(name) {
   if (name === "date") runDateScreenSequence();
   if (name === "time") runTimeScreenSequence();
   if (name === "timeout") runTimeoutScreenSequence();
+  if (name === "food") runFoodScreenSequence();
+  if (name === "addask") runAddAskScreenSequence();
+  if (name === "reasons") runReasonsScreenSequence();
   
   updateNav();
 }
@@ -227,11 +230,7 @@ document.querySelectorAll('[data-choice="time"]').forEach(btn => {
   btn.addEventListener("click", () => {
     state.time = btn.dataset.value;
     timeReaction.textContent = "great choice again";
-    timeReact.hidden = false;
-    
-    timeReact.style.transform = "scale(0.9)";
-    timeReact.style.transition = "transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.25)";
-    setTimeout(() => { timeReact.style.transform = "scale(1)"; }, 20);
+    timeReact.hidden = true; 
 
     timeNextBtnReveal.classList.add("show"); 
     updateNav();
@@ -281,8 +280,7 @@ function startWaterBreak() {
 
 function leaveWaterBreak() {
   clearInterval(waterTimer);
-  const target = document.querySelector('[data-screen="food"]') ? "food" : "date";
-  show(target);
+  show("food");
 }
 
 document.getElementById("timeoutStartBtn").addEventListener("click", () => {
@@ -295,26 +293,156 @@ document.getElementById("waterSkip").addEventListener("click", () => {
   leaveWaterBreak();
 });
 
+/* =============================================================
+   SCREEN 4 — CUISINE PICKER SELECTIONS FLOW
+   ============================================================= */
+const foodOther = document.getElementById("foodOther");
+const foodReaction = document.getElementById("foodReaction");
+const foodReact = document.getElementById("foodReact");
+const foodNextBtnReveal = document.getElementById("foodNextBtnReveal");
+
+const FOOD_RESPONSES = {
+  "Italian": "i was thinking the same",
+  "Japanese": "that is a reaaaalyyy gooood choice",
+  "Mediterranean": "that is great choice"
+};
+
+function runFoodScreenSequence() {
+  const qText = document.getElementById("foodQuestionReveal");
+  const options = document.getElementById("foodOptionsReveal");
+
+  [qText, options].forEach(el => el.classList.remove("show"));
+  foodNextBtnReveal.classList.remove("show");
+  foodOther.style.display = "none";
+  foodOther.value = "";
+  foodReact.hidden = true;
+  foodReaction.textContent = "";
+
+  setTimeout(() => { if (currentScreen === "food") qText.classList.add("show"); }, 200);
+  setTimeout(() => { if (currentScreen === "food") options.classList.add("show"); }, 1100);
+}
+
+function triggerFoodFeedback(textStr) {
+  foodReaction.textContent = textStr;
+  foodReact.hidden = false;
+  
+  foodReact.style.transform = "scale(0.9)";
+  foodReact.style.transition = "transform 0.24s cubic-bezier(0.175, 0.885, 0.32, 1.25)";
+  setTimeout(() => { foodReact.style.transform = "scale(1)"; }, 20);
+
+  foodNextBtnReveal.classList.add("show");
+  updateNav();
+}
+
+document.querySelectorAll('[data-choice="food"]').forEach(btn => {
+  btn.addEventListener("click", () => {
+    const val = btn.dataset.value;
+    if (val === "__other__") {
+      foodOther.style.display = "block";
+      foodOther.focus();
+      foodReaction.textContent = "";
+      foodReact.hidden = true;
+      foodNextBtnReveal.classList.remove("show");
+      state.food = null;
+      updateNav();
+      return;
+    }
+    
+    foodOther.style.display = "none";
+    state.food = val;
+    triggerFoodFeedback(FOOD_RESPONSES[val] || "great choice");
+  });
+});
+
+foodOther.addEventListener("input", () => {
+  const inputVal = foodOther.value.trim();
+  state.food = inputVal || null;
+  if (inputVal) {
+    triggerFoodFeedback("that is a reaaaalyyy gooood choice");
+  } else {
+    foodReact.hidden = true;
+    foodNextBtnReveal.classList.remove("show");
+    foodReaction.textContent = "";
+    updateNav();
+  }
+});
+
+/* =============================================================
+   SCREEN 5 — NOTES ASSET TIMELINES
+   ============================================================= */
+function runAddAskScreenSequence() {
+  const btn = document.getElementById("addaskNextBtn");
+  btn.parentElement.classList.remove("show");
+  setTimeout(() => { btn.parentElement.classList.add("show"); }, 400);
+}
+const noteBox = document.getElementById("noteBox");
+noteBox.addEventListener("input", () => { state.note = noteBox.value.trim(); });
+
+/* =============================================================
+   SCREEN 6 — INSTAGRAM CAROUSEL CONTROLLER
+   ============================================================= */
+const igTrack = document.getElementById("igTrack");
+const igSlides = igTrack ? [...igTrack.children] : [];
+const igDots = document.getElementById("igDots");
+let igIndex = 0;
+
+function igRender() {
+  igTrack.style.transform = `translateX(-${igIndex * 100}%)`;
+  [...igDots.children].forEach((dot, idx) => dot.classList.toggle("on", idx === igIndex));
+}
+
+function runReasonsScreenSequence() {
+  igIndex = 0;
+  igRender();
+}
+
+if (igTrack) {
+  igDots.innerHTML = "";
+  igSlides.forEach((_, idx) => {
+    const dotMark = document.createElement("span");
+    dotMark.className = "ig-dotmark" + (idx === 0 ? " on" : "");
+    igDots.appendChild(dotMark);
+  });
+  document.getElementById("igNext").addEventListener("click", () => {
+    igIndex = (igIndex + 1) % igSlides.length;
+    igRender();
+  });
+  document.getElementById("igPrev").addEventListener("click", () => {
+    igIndex = (igIndex - 1 + igSlides.length) % igSlides.length;
+    igRender();
+  });
+}
+
 /* ---------- Static Interaction Bindings ---------- */
 document.querySelector('[data-action="say-yes"]').addEventListener("click", () => {
   const vid = document.getElementById("yesVideo");
-  if (vid) {
-    vid.load(); 
-  }
+  if (vid) { vid.load(); }
   show("afteryes");
 });
 
-document.getElementById("startJourneyBtn").addEventListener("click", () => {
-  show("ask2");
-});
+document.getElementById("startJourneyBtn").addEventListener("click", () => { show("ask2"); });
 document.getElementById("videoNextBtn").addEventListener("click", () => { show("date"); });
 document.getElementById("dateNextBtn").addEventListener("click", () => { show("time"); });
-document.getElementById("timeNextBtn").addEventListener("click", () => { show("timeout"); });
+
+document.getElementById("timeNextBtn").addEventListener("click", () => {
+  timeReact.hidden = false;
+  timeReact.style.transform = "scale(0.9)";
+  timeReact.style.transition = "transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.25)";
+  setTimeout(() => { timeReact.style.transform = "scale(1)"; }, 20);
+  setTimeout(() => { if (currentScreen === "time") { show("timeout"); } }, 1500);
+});
+
+document.getElementById("foodNextBtn").addEventListener("click", () => { show("addask"); });
+document.getElementById("addaskNextBtn").addEventListener("click", () => { show("reasons"); });
+document.getElementById("reasonsNextBtn").addEventListener("click", () => {
+  // End summary screen route trigger path connection field placeholder
+  alert("End Page coming up next! Current selections saved: " + JSON.stringify(state));
+});
 
 /* =============================================================
    CENTER EDGE SYSTEM NAVIGATION Matrix
    ============================================================= */
-const ORDER = ["ask1","ask2","afteryes","date","time","timeout"];
+const ORDER = ["ask1","ask2","afteryes","date","time","timeout","food","addask","reasons"];
 const NAV_HIDDEN_ON = ["ask1","ask2","timeout"]; 
 const navBack = document.getElementById("navBack");
 const navFwd  = document.getElementById("navFwd");
@@ -324,6 +452,7 @@ function forwardAllowed(screen) {
     case "afteryes": return videoDone;   
     case "date": return !!state.day;     
     case "time": return !!state.time;
+    case "food": return !!state.food;
     default:     return true;            
   }
 }
