@@ -37,12 +37,13 @@ function show(name) {
 function runScreen1aSequence() {
   const arrow = document.getElementById("arrowReveal");
   arrow.classList.remove("show");
+  // Reduced from 1200ms to 600ms for a snappier start
   setTimeout(() => {
     if (currentScreen === "ask1") arrow.classList.add("show");
-  }, 1200);
+  }, 600);
 }
 
-/* ---------- Screen 1b Timed Narrative Sequence ---------- */
+/* ---------- Screen 1b Timed Narrative Sequence (QUICKER GAPS) ---------- */
 function runScreen1bSequence() {
   const punch = document.getElementById("seqPunch");
   const askText = document.getElementById("seqAsk");
@@ -50,9 +51,14 @@ function runScreen1bSequence() {
 
   [punch, askText, buttons].forEach(el => el.classList.remove("show"));
 
-  setTimeout(() => { if (currentScreen === "ask2") punch.classList.add("show"); }, 200);
-  setTimeout(() => { if (currentScreen === "ask2") askText.classList.add("show"); }, 2200);
-  setTimeout(() => { if (currentScreen === "ask2") buttons.classList.add("show"); }, 3800);
+  // Beat 1: Drop the punchline instantly
+  setTimeout(() => { if (currentScreen === "ask2") punch.classList.add("show"); }, 100);
+  
+  // Beat 2: Reduced pause gap to drop "can i have one with you?" quicker
+  setTimeout(() => { if (currentScreen === "ask2") askText.classList.add("show"); }, 1100);
+  
+  // Beat 3: Bring the option row right into play quickly
+  setTimeout(() => { if (currentScreen === "ask2") buttons.classList.add("show"); }, 2000);
 }
 
 /* ---------- Absolute No Region Run Away Logic + Cynthia Popup ---------- */
@@ -142,7 +148,7 @@ function runYesSequence() {
 }
 
 /* =============================================================
-   SCREEN 2 — DATE PICKER TIMELINE SELECTIONS
+   SCREEN 2 — DATE PICKER TIMELINE SELECTIONS (QUICKER GAPS)
    ============================================================= */
 const dateReaction = document.getElementById("dateReaction");
 const dayReact = document.getElementById("dayReact");
@@ -162,10 +168,11 @@ function runDateScreenSequence() {
 
   [qText, options].forEach(el => el.classList.remove("show"));
   dateNextBtnReveal.classList.remove("show");
-  dayReact.hidden = true; // Fix: Kept hidden on question render
+  dayReact.hidden = true; 
 
-  setTimeout(() => { if (currentScreen === "date") qText.classList.add("show"); }, 200);
-  setTimeout(() => { if (currentScreen === "date") options.classList.add("show"); }, 1100);
+  // Accelerated step timelines to capture interest faster
+  setTimeout(() => { if (currentScreen === "date") qText.classList.add("show"); }, 150);
+  setTimeout(() => { if (currentScreen === "date") options.classList.add("show"); }, 750);
 }
 
 function showDayReact(info) {
@@ -201,14 +208,14 @@ document.querySelectorAll('[data-choice="day"]').forEach(btn => {
 
     clearTimeout(badDayTimer);
     state.day = val;
-    showDayReact(info); // Fix: Peppa Pig pops up smoothly directly upon clicking selection
+    showDayReact(info); 
     dateNextBtnReveal.classList.add("show"); 
     updateNav(); 
   });
 });
 
 /* =============================================================
-   SCREEN 3 — TIME PICKER TIMELINE SELECTIONS
+   SCREEN 3 — TIME PICKER TIMELINE SELECTIONS (QUICKER GAPS)
    ============================================================= */
 const timeReaction = document.getElementById("timeReaction");
 const timeReact = document.getElementById("timeReact");
@@ -220,18 +227,19 @@ function runTimeScreenSequence() {
 
   [qText, options].forEach(el => el.classList.remove("show"));
   timeNextBtnReveal.classList.remove("show");
-  timeReact.hidden = true; // Fix: Kept hidden on question render
+  timeReact.hidden = true; 
   timeReaction.textContent = "";
 
-  setTimeout(() => { if (currentScreen === "time") qText.classList.add("show"); }, 200);
-  setTimeout(() => { if (currentScreen === "time") options.classList.add("show"); }, 1100);
+  // Accelerated matching slide speeds
+  setTimeout(() => { if (currentScreen === "time") qText.classList.add("show"); }, 150);
+  setTimeout(() => { if (currentScreen === "time") options.classList.add("show"); }, 750);
 }
 
 document.querySelectorAll('[data-choice="time"]').forEach(btn => {
   btn.addEventListener("click", () => {
     state.time = btn.dataset.value;
     timeReaction.textContent = "great choice again";
-    timeReact.hidden = true; // Fix: Anthony Mackie stays hidden until button confirmation
+    timeReact.hidden = true; 
 
     timeNextBtnReveal.classList.add("show"); 
     updateNav();
@@ -369,15 +377,44 @@ foodOther.addEventListener("input", () => {
 });
 
 /* =============================================================
-   SCREEN 5 — NOTES ASSET TIMELINES
+   SCREEN 5 — CUSTOM INTERACTIVE NOTES FLOW
    ============================================================= */
-function runAddAskScreenSequence() {
-  const btn = document.getElementById("addaskNextBtn");
-  btn.parentElement.classList.remove("show");
-  setTimeout(() => { btn.parentElement.classList.add("show"); }, 400);
-}
+const noteStageTeaser = document.getElementById("noteStageTeaser");
+const noteStageInput = document.getElementById("noteStageInput");
+const noteTypingReact = document.getElementById("noteTypingReact");
 const noteBox = document.getElementById("noteBox");
-noteBox.addEventListener("input", () => { state.note = noteBox.value.trim(); });
+
+function runAddAskScreenSequence() {
+  noteStageTeaser.hidden = false;
+  noteStageInput.hidden = true;
+  noteTypingReact.hidden = true;
+  noteBox.value = "";
+  state.note = "";
+
+  const teaserImg = document.getElementById("noteTeaserImgReveal");
+  const teaserBtn = document.getElementById("noteTeaserBtnReveal");
+
+  [teaserImg, teaserBtn].forEach(el => el.classList.remove("show"));
+
+  setTimeout(() => { if (currentScreen === "addask") teaserImg.classList.add("show"); }, 150);
+  setTimeout(() => { if (currentScreen === "addask") teaserBtn.classList.add("show"); }, 900);
+}
+
+noteBox.addEventListener("focus", () => {
+  noteTypingReact.hidden = false;
+});
+noteBox.addEventListener("input", () => { 
+  state.note = noteBox.value.trim(); 
+  if (state.note) {
+    noteTypingReact.hidden = false;
+  }
+});
+
+document.getElementById("noteOpenBtn").addEventListener("click", () => {
+  noteStageTeaser.hidden = true;
+  noteStageInput.hidden = false;
+  noteBox.focus(); 
+});
 
 /* =============================================================
    SCREEN 6 — INSTAGRAM CAROUSEL CONTROLLER
@@ -425,7 +462,6 @@ document.getElementById("startJourneyBtn").addEventListener("click", () => { sho
 document.getElementById("videoNextBtn").addEventListener("click", () => { show("date"); });
 document.getElementById("dateNextBtn").addEventListener("click", () => { show("time"); });
 
-// Smoothly choreography sequence for Anthony Mackie popping up ONLY on button click confirmation!
 document.getElementById("timeNextBtn").addEventListener("click", () => {
   timeReact.hidden = false;
   timeReact.style.transform = "scale(0.9)";

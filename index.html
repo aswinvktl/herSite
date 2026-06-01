@@ -10,13 +10,9 @@
 
 <div id="stage">
 
-  <!-- Fixed Center Edge System Navigation Controls -->
   <button id="navBack" class="nav-arrow nav-back" aria-label="back" hidden>‹</button>
   <button id="navFwd" class="nav-arrow nav-fwd" aria-label="forward" hidden>›</button>
 
-  <!-- ========================================================
-       SCREEN 1a — THE QUESTION SETUP
-  ========================================================= -->
   <section class="screen is-active bg-master" data-screen="ask1">
     <div class="cutesy-box">
       <h1 class="joke-q">Why did the calendar feel proud?</h1>
@@ -26,9 +22,6 @@
     </div>
   </section>
 
-  <!-- ========================================================
-       SCREEN 1b — PUNCHLINE & NARRATIVE SEQUENCE
-  ========================================================= -->
   <section class="screen bg-master" data-screen="ask2">
     <div class="cutesy-box">
       <p class="joke-punch reveal-item" id="seqPunch">coz it has too many dates. hahahahah</p>
@@ -37,7 +30,6 @@
       <div class="btn-row reveal-item" id="seqButtons">
         <button class="btn btn-yes" data-action="say-yes">YES</button>
         
-        <!-- The position-managed buffer tracking region wrapper -->
         <div class="no-trigger-region" id="noRegion">
           <button class="btn btn-no">no</button>
         </div>
@@ -45,14 +37,10 @@
     </div>
   </section>
 
-  <!-- Centered Cynthia Scare Popup Overlay Layer -->
   <img class="cynthia-popup" id="cynthiaScare"
        src="resources/cynthia-erivo-shocked-gif-cynthia-erivo-shocked-shock.gif" 
        alt="Surprise!" />
 
-  <!-- ========================================================
-       SCREEN after YES — Video stream playing cleanly with Audio
-  ========================================================= -->
   <section class="screen bg-master" data-screen="afteryes">
     <div class="cutesy-box">
       <div class="yes-stage">
@@ -63,22 +51,16 @@
         </video>
       </div>
       
-      <!-- Dedicated Post-Video Action Controller -->
       <div class="reveal-item" id="videoNextBtnReveal" style="margin-top: 24px;">
         <button class="btn btn-yes-next" id="videoNextBtn">next →</button>
       </div>
     </div>
   </section>
 
-  <!-- ========================================================
-       SCREEN 2 — DATE PICKER
-  ========================================================= -->
   <section class="screen bg-master" data-screen="date">
     <div class="cutesy-box">
-      <!-- Beat 1: The Question floats up first -->
       <h2 class="day-q reveal-item" id="dateQuestionReveal" style="color: var(--ink); margin-top: 10px;">so what day are WE free?</h2>
       
-      <!-- Beat 2: The Interactive Day Selection Options reveal right after -->
       <div class="options reveal-item" id="dateOptionsReveal">
         <button class="opt" data-choice="day" data-value="Thursday 04 June">Thursday 04</button>
         <button class="opt" data-choice="day" data-value="Friday 05 June">Friday 05</button>
@@ -86,53 +68,40 @@
         <button class="opt" data-choice="day" data-value="Sunday 07 June">Sunday 07</button>
       </div>
 
-      <!-- Live reaction strings and pop-up context cards -->
       <p class="reaction" id="dateReaction"></p>
       <img class="day-react" id="dayReact" alt="" hidden />
       
-      <!-- Card-based next button (unlocked after picking a valid date) -->
       <div class="reveal-item" id="dateNextBtnReveal" style="margin-top: 24px;">
         <button class="btn btn-yes-next" id="dateNextBtn">next →</button>
       </div>
     </div>
   </section>
 
-  <!-- ========================================================
-       SCREEN 3 — TIME PICKER
-  ========================================================= -->
   <section class="screen bg-master" data-screen="time">
     <div class="cutesy-box">
-      <!-- Beat 1: The Question floats up first -->
       <h2 class="day-q reveal-item" id="timeQuestionReveal" style="color: var(--ink); margin-top: 10px;">and what time?</h2>
       
-      <!-- Beat 2: The Interactive Time Selection Options reveal right after -->
       <div class="options reveal-item" id="timeOptionsReveal">
         <button class="opt" data-choice="time" data-value="5pm">5pm</button>
         <button class="opt" data-choice="time" data-value="6pm">6pm</button>
         <button class="opt" data-choice="time" data-value="7pm">7pm</button>
       </div>
 
-      <!-- Live reaction strings and Anthony Smacky pop-up -->
       <p class="reaction" id="timeReaction"></p>
       <img class="day-react" id="timeReact" src="resources/anthonySmacky.jpg" alt="" hidden />
       
-      <!-- Card-based next button (reveals from under the box after picking a time) -->
       <div class="reveal-item" id="timeNextBtnReveal" style="margin-top: 24px;">
         <button class="btn btn-yes-next" id="timeNextBtn">next →</button>
       </div>
     </div>
   </section>
 
-  <!-- ========================================================
-       SCREEN 3b — TIMEOUT / WATER BREAK (Intermission Page)
-  ========================================================= -->
   <section class="screen bg-master" data-screen="timeout">
     <div class="cutesy-box">
       
-      <!-- Stage 1: Shaq Timeout Call (Tap to Proceed) -->
       <div id="timeoutStage1">
         <div class="reveal-item" id="shaqImgReveal">
-          <img class="day-gif" id="shaqImg" src="resources/shaq-timeout.jpg" alt="Shaq Timeout" style="width: 260px; max-width: 65vw;" />
+          <img class="day-gif" id="shaqImg" src="resources/shaq.jpg" alt="Shaq Timeout" style="width: 260px; max-width: 65vw;" />
         </div>
         <h2 class="day-q reveal-item" id="shaqHeaderReveal" style="color: var(--ink); margin: 15px 0 5px;">⏱️ TIMEOUT</h2>
         <p class="reaction reveal-item" id="shaqSubReveal" style="margin-bottom: 20px;">Take a quick breath...</p>
@@ -142,7 +111,6 @@
         </div>
       </div>
 
-      <!-- Stage 2: 10-Second Active Countdown hydration stop -->
       <div id="timeoutStage2" hidden>
         <div class="reveal-item show">
           <img class="day-gif" src="resources/drinkwater.jpeg" alt="Drink Water Reminder" style="width: 240px; max-width: 60vw;" />
@@ -158,15 +126,10 @@
     </div>
   </section>
 
-  <!-- ========================================================
-       SCREEN 4 — FOOD SELECTION (Cuisine Picker)
-  ========================================================= -->
   <section class="screen bg-master" data-screen="food">
     <div class="cutesy-box">
-      <!-- Beat 1: The Question floats up first -->
       <h2 class="day-q reveal-item" id="foodQuestionReveal" style="color: var(--ink); margin-top: 10px;">what culture do we think?</h2>
       
-      <!-- Beat 2: The Cuisine Options -->
       <div class="options reveal-item" id="foodOptionsReveal">
         <button class="opt" data-choice="food" data-value="Italian">Italian</button>
         <button class="opt" data-choice="food" data-value="Japanese">Japanese</button>
@@ -174,36 +137,50 @@
         <button class="opt opt-other" data-choice="food" data-value="__other__">something else…</button>
       </div>
 
-      <!-- Hidden custom user input field box for 'something else...' -->
-      <input type="text" id="foodOther" class="textfield" hidden placeholder="" maxlength="80" style="width: 100%; max-width: 320px; margin: 12px auto; padding: 10px; border: 2px solid var(--ink); border-radius: 12px; font-family: var(--body); display: none;" />
+      <input type="text" id="foodOther" class="textfield" hidden placeholder="go on then, what are we craving?" maxlength="80" style="width: 100%; max-width: 320px; margin: 12px auto; padding: 10px; border: 2px solid var(--ink); border-radius: 12px; font-family: var(--body); display: none;" />
 
-      <!-- Live custom responses and reaction image element box -->
       <p class="reaction" id="foodReaction"></p>
       <img class="day-react" id="foodReact" src="resources/75daf93cead7ed5e7df1a50352681188(3).jpg" alt="" hidden />
 
-      <!-- Card-based next button layout container -->
       <div class="reveal-item" id="foodNextBtnReveal" style="margin-top: 24px;">
         <button class="btn btn-yes-next" id="foodNextBtn">next →</button>
       </div>
     </div>
   </section>
 
-  <!-- ========================================================
-       SCREEN 5 — ANY DETAILS TO ADD / NOTE BOX
-  ========================================================= -->
   <section class="screen bg-master" data-screen="addask">
     <div class="cutesy-box">
-      <h2 class="day-q" style="color: var(--ink); margin-bottom: 20px;">anything you want to add or ask?</h2>
-      <textarea id="noteBox" class="textarea" placeholder="a specific snack? a dealbreaker? nothing? all valid." maxlength="300" style="width: 100%; max-width: 440px; min-height: 120px; margin: 0 auto 20px; padding: 14px; border: 3px solid var(--ink); border-radius: 15px; font-family: var(--body); font-size: 1rem; resize: none; display: block; background: #fffdfa;"></textarea>
-      <div>
-        <button class="btn btn-yes-next" id="addaskNextBtn">next →</button>
+      
+      <div id="noteStageTeaser">
+        <div class="reveal-item" id="noteTeaserImgReveal">
+          <img class="day-gif" src="resources/637f69f38e76dd2b118ab988df67cfc0(3).jpg" alt="Teaser Preview" style="width: 240px; max-width: 60vw;" />
+        </div>
+        <div class="reveal-item" id="noteTeaserBtnReveal" style="margin-top: 20px;">
+          <button class="btn btn-yes-next" id="noteOpenBtn">read note →</button>
+        </div>
       </div>
+
+      <div id="noteStageInput" hidden>
+        <div class="reveal-item show" style="margin-bottom: 12px;">
+          <img class="day-gif" src="resources/67e5342afddcacf45fcc102c2a12c11d(3).jpg" alt="Input Header" style="width: 200px; max-width: 50vw;" />
+        </div>
+
+        <h2 class="day-q" style="color: var(--ink); margin-bottom: 15px;">anything you want to add or ask?</h2>
+        
+        <textarea id="noteBox" class="textarea" placeholder="a specific snack? a dealbreaker? nothing? all valid." maxlength="300" style="width: 100%; max-width: 440px; min-height: 110px; margin: 0 auto; padding: 14px; border: 3px solid var(--ink); border-radius: 15px; font-family: var(--body); font-size: 1rem; resize: none; display: block; background: #fffdfa;"></textarea>
+        
+        <div id="noteTypingReact" hidden style="margin-top: 16px;">
+          <img class="day-gif" src="resources/ae07830448a6b5300a9526f3abc86a93.jpg" alt="Typing Reaction" style="width: 180px; max-width: 45vw;" />
+        </div>
+
+        <div style="margin-top: 24px;">
+          <button class="btn btn-yes-next" id="addaskNextBtn">next →</button>
+        </div>
+      </div>
+
     </div>
   </section>
 
-  <!-- ========================================================
-       SCREEN 6 — REASONS YOU SHOULD DATE ME (Carousel Slide Deck)
-  ========================================================= -->
   <section class="screen bg-master" data-screen="reasons">
     <div class="ig-post" style="width: 100%; max-width: 440px; background: #fffdfa; border: 3px solid var(--ink); border-radius: 20px; overflow: hidden; box-shadow: 6px 6px 0 var(--ink); position: relative; z-index: 2;">
       <div class="ig-head" style="display: flex; align-items: center; gap: 10px; padding: 12px 14px; border-bottom: 2.5px solid var(--ink); background: var(--paper);">
@@ -213,12 +190,10 @@
 
       <div class="ig-frame" style="position: relative; width: 100%; aspect-ratio: 1/1; overflow: hidden; background: #000;">
         <div class="ig-track" id="igTrack">
-          <!-- Slide Deck Elements Matrix -->
           <div class="ig-slide" style="min-width: 100%; height: 100%;"><img src="resources/reasonswhy.jpeg" alt="" style="width:100%; height:100%; object-fit:cover;" /></div>
           <div class="ig-slide" style="min-width: 100%; height: 100%;"><img src="resources/interest.jpeg" alt="" style="width:100%; height:100%; object-fit:cover;" /></div>
           <div class="ig-slide" style="min-width: 100%; height: 100%;"><img src="resources/696536945_18053016668723430_790826543717539564_n.jpeg" alt="" style="width:100%; height:100%; object-fit:cover;" /></div>
           
-          <!-- Newly Integrated Slide Added Here -->
           <div class="ig-slide" style="min-width: 100%; height: 100%;"><img src="resources/d43650b907756046ab2df754000c0c22.jpg" alt="" style="width:100%; height:100%; object-fit:cover;" /></div>
           
           <div class="ig-slide" style="min-width: 100%; height: 100%;"><img src="resources/e4590f921b1b17ec07327fc5b523b721(3).jpg" alt="" style="width:100%; height:100%; object-fit:cover;" /></div>
