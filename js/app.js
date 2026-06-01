@@ -498,7 +498,7 @@ function runSummaryScreenSequence() {
     
     // --- PRIVATE CONFIGURATION GATEWAY ---
     // Swap this out with your personal note or calendar link privately!
-    const targetUrl = "https://google.com"; 
+    const targetUrl = "https://wa.me/qr/AD4OS23Y25BTK1"; 
     
     new QRCode(qrTargetContainer, {
       text: targetUrl,
