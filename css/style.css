@@ -1,6 +1,4 @@
-/* =============================================================
-   date-site — Complete Custom Playful Stylesheet
-   ============================================================= */
+/* her site styles. mostly just made it up as i went lol */
 @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;1,9..144,500&family=Nunito:wght@400;700&display=swap');
 
 :root {
@@ -29,7 +27,7 @@ body {
 
 #stage { position: relative; min-height: 100vh; }
 
-/* Master Layout Background Layer Setup */
+/* background image sits behind everything, with a dark layer so text reads */
 .bg-master {
   background-image: url('../resources/•••.jpeg');
   background-size: cover;
@@ -42,7 +40,7 @@ body {
   z-index: 0;
 }
 
-/* ---------- Screen Layout States ---------- */
+/* one screen visible at a time, the rest are display none */
 .screen {
   position: absolute; inset: 0;
   display: none;
@@ -56,7 +54,7 @@ body {
   opacity: 1;
 }
 
-/* ---------- Semi-Transparent Squiggly Sketchpad Box ---------- */
+/* the wobbly hand drawn looking box. the weird border-radius is on purpose */
 .cutesy-box {
   background: var(--paper);
   backdrop-filter: blur(14px);
@@ -76,7 +74,7 @@ body {
   border-radius: 225px 30px 255px 20px / 25px 255px 30px 225px;
 }
 
-/* ---------- Center Edge System Navigation ---------- */
+/* back/forward arrows stuck to the screen edges */
 .nav-arrow {
   position: fixed;
   top: 50%;
@@ -108,7 +106,7 @@ body {
   .nav-back { left: 10px; } .nav-fwd { right: 10px; }
 }
 
-/* ---------- Sequence Entry Animations ---------- */
+/* stuff fades up when its given .show */
 .reveal-item {
   opacity: 0;
   transform: translateY(15px);
@@ -123,7 +121,7 @@ body {
 .joke-punch { font-family: var(--body); font-size: clamp(1.2rem, 3vw, 1.5rem); font-style: italic; font-weight: 700; color: var(--accent-d); margin: 0 0 24px; }
 .ask { font-family: var(--display); font-size: clamp(2rem, 5.5vw, 3.2rem); color: var(--ink); margin: 0 0 32px; }
 
-/* ---------- Interactive Buttons & Absolute Hotspot Frame Layout ---------- */
+/* buttons */
 .btn-row { 
   display: flex; 
   align-items: center; 
@@ -143,6 +141,7 @@ body {
   transition: transform .15s ease, box-shadow .15s ease, border-radius .15s ease; 
 }
 
+/* made YES big so its impossible to miss */
 .btn-yes {
   background: var(--yes); 
   color: white; 
@@ -159,7 +158,6 @@ body {
   border-radius: 95px 25px 120px 15px / 15px 110px 25px 95px;
 }
 
-/* Post-Video Card Button Styling */
 .btn-yes-next {
   background: var(--accent);
   color: white;
@@ -174,7 +172,7 @@ body {
   box-shadow: 1px 1px 0px var(--ink);
 }
 
-/* Invisible Absolute Region container frame around the "No" button */
+/* big invisible box around the no button so it dodges before she even reaches it */
 .no-trigger-region {
   padding: 40px 50px; 
   display: inline-block;
@@ -186,6 +184,7 @@ body {
   transition: top 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), right 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
+/* pointer-events none so you literally cant click it hah */
 .btn-no {
   background: #fffdfa; 
   color: var(--ink); 
@@ -201,7 +200,7 @@ body {
 }
 .arrow-next:hover { transform: scale(1.1) rotate(15deg); background: var(--accent); color: white; box-shadow: 1px 1px 0px var(--ink); }
 
-/* ---------- YES Page Image/Video Square Container Frame ---------- */
+/* the square frame on the yes page that holds the 2 pics + video */
 .yes-stage {
   position: relative;
   width: 100%;
@@ -226,7 +225,7 @@ body {
 }
 .yes-media.show { opacity: 1; }
 
-/* ---------- Center Screen Borderless Cynthia Scare Popup Overlay ---------- */
+/* cynthia gif that pops in the middle when she hovers no */
 .cynthia-popup {
   position: fixed;
   top: 50%; left: 50%;
@@ -242,6 +241,7 @@ body {
   transform: translate(-50%, -50%) scale(1);
 }
 
+/* little hint text at the bottom of page 1 */
 .screen-instruction {
   position: absolute;
   bottom: 28px;
@@ -257,21 +257,15 @@ body {
   pointer-events: none;
 }
 
-/* ---------- Form Options Configuration Fields ---------- */
+/* the option buttons (days, times, cuisines) */
 .options { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin-bottom: 14px; }
 .opt { font-family: var(--body); font-weight: 700; background: var(--bg2); border: 2px solid var(--ink); border-radius: 80px 15px 75px 12px / 14px 70px 12px 85px; padding: 12px 20px; font-size: 1rem; cursor: pointer; box-shadow: 2px 2px 0px var(--ink); transition: transform .12s ease, background .2s ease, border-radius .12s ease; }
 .opt:hover { transform: translateY(-2px) rotate(1deg); background: var(--accent); color: white; border-radius: 75px 12px 80px 15px / 12px 85px 14px 70px; }
+
 .reaction { font-family: var(--display); font-style: italic; font-size: 1.15rem; min-height: 1.4em; margin: 12px 0 0; color: var(--ink); }
-.day-wrap { position: relative; z-index: 2; text-align: center; color: #fff; max-width: 720px; }
 .day-gif { width: 200px; max-width: 50vw; border-radius: 14px; margin-bottom: 18px; box-shadow: 0 10px 36px rgba(0,0,0,0.3); }
 .day-q { font-family: var(--display); font-size: clamp(1.8rem, 4.5vw, 2.8rem); margin: 0 0 26px; }
+/* the reaction pics that bounce in after you pick something */
 .day-react { display: block; margin: 18px auto 0; width: 280px; max-width: 70vw; border-radius: 14px; box-shadow: 0 12px 40px rgba(0,0,0,0.35); }
 
-/* ---------- Instagram Carousel Sub-Structure ---------- */
-.ig-track { display: flex; height: 100%; width: 100%; transition: transform 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
-.ig-arrow { position: absolute; top: 50%; transform: translateY(-50%); width: 38px; height: 38px; border-radius: 50%; border: none; background: rgba(255,255,255,0.85); font-size: 1.6rem; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.2); z-index: 5; }
-.ig-prev { left: 10px; } .ig-next { right: 10px; }
-.ig-dots { display: flex; gap: 6px; justify-content: center; padding: 12px; }
-.ig-dotmark { width: 7px; height: 7px; border-radius: 50%; background: #d9b9c4; transition: background 0.2s ease; }
-.ig-dotmark.on { background: var(--accent); }
 .textfield { background: #fffdfa; color: var(--ink); font-family: var(--body); font-size: 1rem; text-align: center; }

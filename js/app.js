@@ -1,24 +1,25 @@
-/* =============================================================
-   date-site — Integrated Transition & Navigation Engine
-   ============================================================= */
+// her site lol
+// ok so everything is just screens that get show()'d one at a time
+// dont touch the order array at the bottom or it all breaks
 
 const state = { day: null, time: null, food: null, note: "" };
 let currentScreen = "ask1";
 let videoDone = false;
-let qrGenerated = false;
 
-/* ---------- Background music ---------- */
+// ----- music -----
+// browsers wont let it autoplay until she clicks something, so we just
+// fire it on the first click/tap. took me ages to figure out why it was silent
 const bgMusic = document.getElementById("bgMusic");
 let musicStarted = false;
 function startMusic() {
   if (musicStarted || !bgMusic) return;
   bgMusic.volume = 0.55;
-  bgMusic.play().then(() => { musicStarted = true; }).catch(() => {/* will retry on next interaction */});
+  bgMusic.play().then(() => { musicStarted = true; }).catch(() => {});
 }
-// kick it off on the first interaction anywhere (autoplay policies need a gesture)
-document.addEventListener("click", startMusic, { once: false });
-document.addEventListener("touchstart", startMusic, { once: false });
+document.addEventListener("click", startMusic);
+document.addEventListener("touchstart", startMusic);
 
+// pause the song while the video plays so they dont fight, then bring it back
 function duckMusicForVideo(vid) {
   if (!bgMusic) return;
   bgMusic.pause();
@@ -28,7 +29,7 @@ function duckMusicForVideo(vid) {
   vid.addEventListener("pause", resume, { once: true });
 }
 
-/* ---------- Core Screen Switching Matrix ---------- */
+// the main thing. show one screen hide the rest
 const screens = document.querySelectorAll(".screen");
 function show(name) {
   currentScreen = name;
@@ -50,13 +51,12 @@ function show(name) {
   if (name === "timeout") runTimeoutScreenSequence();
   if (name === "food") runFoodScreenSequence();
   if (name === "addask") runAddAskScreenSequence();
-  if (name === "reasons") runReasonsScreenSequence();
   if (name === "summary") runSummaryScreenSequence();
-  
+
   updateNav();
 }
 
-/* ---------- Screen 1a Arrow Entry Delay ---------- */
+// little delay so the arrow doesnt just slam in
 function runScreen1aSequence() {
   const arrow = document.getElementById("arrowReveal");
   arrow.classList.remove("show");
@@ -65,7 +65,7 @@ function runScreen1aSequence() {
   }, 600);
 }
 
-/* ---------- Screen 1b Timed Narrative Sequence ---------- */
+// punchline then the question then the buttons, one after another
 function runScreen1bSequence() {
   const punch = document.getElementById("seqPunch");
   const askText = document.getElementById("seqAsk");
@@ -78,7 +78,7 @@ function runScreen1bSequence() {
   setTimeout(() => { if (currentScreen === "ask2") buttons.classList.add("show"); }, 2000);
 }
 
-/* ---------- Absolute No Region Run Away Logic + Cynthia Popup ---------- */
+// the no button runs away + cynthia jumpscare
 const noRegion = document.getElementById("noRegion");
 const cynthiaScare = document.getElementById("cynthiaScare");
 
@@ -105,6 +105,7 @@ noRegion.addEventListener("mouseleave", () => {
   cynthiaScare.classList.remove("active");
 });
 
+// phones dont hover so do it on tap too
 noRegion.addEventListener("touchstart", (e) => {
   e.preventDefault();
   cynthiaScare.classList.add("active");
@@ -112,9 +113,10 @@ noRegion.addEventListener("touchstart", (e) => {
   setTimeout(() => { cynthiaScare.classList.remove("active"); }, 1000);
 });
 
-/* ---------- YES Flow Crossfade Sequence Tracker ---------- */
-const YES_HOLD = 2200;   
-const YES_FADE = 800;    
+// ----- the yes page. img1 fades to img2 then the video plays -----
+// ahhh shit the timing maths here was annoying. its just hold + fade stacked up
+const YES_HOLD = 2200;
+const YES_FADE = 800;
 
 function runYesSequence() {
   const img1 = document.getElementById("yesImg1");
@@ -123,25 +125,26 @@ function runYesSequence() {
   const inlineNext = document.getElementById("videoNextBtnReveal");
 
   [img1, img2, vid].forEach(el => el.classList.remove("show"));
-  inlineNext.classList.remove("show"); 
-  vid.pause(); 
+  inlineNext.classList.remove("show");
+  vid.pause();
   vid.currentTime = 0;
-  
+
   videoDone = false;
-  updateNav(); 
+  updateNav();
 
   setTimeout(() => { if (currentScreen === "afteryes") img1.classList.add("show"); }, 50);
   setTimeout(() => { if (currentScreen === "afteryes") img1.classList.remove("show"); }, 50 + YES_HOLD);
   setTimeout(() => { if (currentScreen === "afteryes") img2.classList.add("show"); }, 50 + YES_HOLD + YES_FADE);
   setTimeout(() => { if (currentScreen === "afteryes") img2.classList.remove("show"); }, 50 + YES_HOLD + YES_FADE + YES_HOLD);
-  
+
   const vidStart = 50 + YES_HOLD + YES_FADE + YES_HOLD + YES_FADE;
   setTimeout(() => {
     if (currentScreen !== "afteryes") return;
     vid.classList.add("show");
-    duckMusicForVideo(vid);   // pause bg music while the video plays, resume after
-    
+    duckMusicForVideo(vid);
+
     vid.play().catch(() => {
+      // if it wont play just let her move on, dont trap her
       videoDone = true;
       inlineNext.classList.add("show");
       if (bgMusic) bgMusic.play().catch(() => {});
@@ -151,7 +154,7 @@ function runYesSequence() {
 
   vid.onended = () => {
     videoDone = true;
-    updateNav(); 
+    updateNav();
     if (currentScreen === "afteryes") {
       inlineNext.classList.add("show");
     }
@@ -166,9 +169,8 @@ function runYesSequence() {
   };
 }
 
-/* =============================================================
-   SCREEN 2 — DATE PICKER TIMELINE SELECTIONS
-   ============================================================= */
+// ===== DAY PICKER =====
+// thurs and sunday are the good ones. fri/sat get rejected and she has to pick again
 const dateReaction = document.getElementById("dateReaction");
 const dayReact = document.getElementById("dayReact");
 const dateNextBtnReveal = document.getElementById("dateNextBtnReveal");
@@ -187,8 +189,8 @@ function runDateScreenSequence() {
 
   [qText, options].forEach(el => el.classList.remove("show"));
   dateNextBtnReveal.classList.remove("show");
-  
-  dayReact.style.display = "none"; 
+
+  dayReact.style.display = "none";
   dateReaction.textContent = "";
 
   setTimeout(() => { if (currentScreen === "date") qText.classList.add("show"); }, 150);
@@ -197,10 +199,11 @@ function runDateScreenSequence() {
 
 function showDayReact(info) {
   dateReaction.textContent = info.caption;
-  dayReact.onerror = () => { dayReact.style.display = "none"; }; 
+  dayReact.onerror = () => { dayReact.style.display = "none"; };
   dayReact.src = info.img;
-  dayReact.style.display = "block"; 
-  
+  dayReact.style.display = "block";
+
+  // little bounce in
   dayReact.style.transform = "scale(0.9)";
   dayReact.style.transition = "transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.25)";
   setTimeout(() => { dayReact.style.transform = "scale(1)"; }, 20);
@@ -213,30 +216,29 @@ document.querySelectorAll('[data-choice="day"]').forEach(btn => {
     if (!info) return;
 
     if (!info.good) {
-      state.day = null;            
+      state.day = null;
       dateNextBtnReveal.classList.remove("show");
-      updateNav(); 
+      updateNav();
       showDayReact(info);
-      
+
+      // show the rejection for a sec then clear it so she tries again
       clearTimeout(badDayTimer);
       badDayTimer = setTimeout(() => {
         dayReact.style.display = "none";
         dateReaction.textContent = "go on, try again 👀";
       }, 2200);
-      return;                      
+      return;
     }
 
     clearTimeout(badDayTimer);
     state.day = val;
-    showDayReact(info); 
-    dateNextBtnReveal.classList.add("show"); 
-    updateNav(); 
+    showDayReact(info);
+    dateNextBtnReveal.classList.add("show");
+    updateNav();
   });
 });
 
-/* =============================================================
-   SCREEN 3 — TIME PICKER TIMELINE SELECTIONS
-   ============================================================= */
+// ===== TIME =====
 const timeReaction = document.getElementById("timeReaction");
 const timeReact = document.getElementById("timeReact");
 const timeNextBtnReveal = document.getElementById("timeNextBtnReveal");
@@ -247,8 +249,8 @@ function runTimeScreenSequence() {
 
   [qText, options].forEach(el => el.classList.remove("show"));
   timeNextBtnReveal.classList.remove("show");
-  
-  timeReact.style.display = "none"; 
+
+  timeReact.style.display = "none";
   timeReaction.textContent = "";
 
   setTimeout(() => { if (currentScreen === "time") qText.classList.add("show"); }, 150);
@@ -260,20 +262,17 @@ document.querySelectorAll('[data-choice="time"]').forEach(btn => {
     state.time = btn.dataset.value;
     timeReaction.textContent = "great choice again";
 
-    // pop the reaction image immediately, same animation as the date screen
     timeReact.style.display = "block";
     timeReact.style.transform = "scale(0.9)";
     timeReact.style.transition = "transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.25)";
     setTimeout(() => { timeReact.style.transform = "scale(1)"; }, 20);
 
-    timeNextBtnReveal.classList.add("show"); 
+    timeNextBtnReveal.classList.add("show");
     updateNav();
   });
 });
 
-/* =============================================================
-   SCREEN 3b — TIMEOUT / INTERMISSION WATER BREAK
-   ============================================================= */
+// ===== timeout / water break thing =====
 const timeoutStage1 = document.getElementById("timeoutStage1");
 const timeoutStage2 = document.getElementById("timeoutStage2");
 const waterCount = document.getElementById("waterCount");
@@ -327,9 +326,9 @@ document.getElementById("waterSkip").addEventListener("click", () => {
   leaveWaterBreak();
 });
 
-/* =============================================================
-   SCREEN 4 — CUISINE PICKER SELECTIONS FLOW
-   ============================================================= */
+// ===== cuisine =====
+// peppa only shows AFTER she clicks. learnt the hard way that the hidden attr
+// loses to css display:block so everything uses style.display now ugh
 const foodOther = document.getElementById("foodOther");
 const foodReaction = document.getElementById("foodReaction");
 const foodReact = document.getElementById("foodReact");
@@ -359,7 +358,7 @@ function runFoodScreenSequence() {
 function triggerFoodFeedback(textStr) {
   foodReaction.textContent = textStr;
   foodReact.style.display = "block";
-  
+
   foodReact.style.transform = "scale(0.9)";
   foodReact.style.transition = "transform 0.24s cubic-bezier(0.175, 0.885, 0.32, 1.25)";
   setTimeout(() => { foodReact.style.transform = "scale(1)"; }, 20);
@@ -375,13 +374,13 @@ document.querySelectorAll('[data-choice="food"]').forEach(btn => {
       foodOther.style.display = "block";
       foodOther.focus();
       foodReaction.textContent = "";
-      foodReact.hidden = true;
+      foodReact.style.display = "none";
       foodNextBtnReveal.classList.remove("show");
       state.food = null;
       updateNav();
       return;
     }
-    
+
     foodOther.style.display = "none";
     state.food = val;
     triggerFoodFeedback(FOOD_RESPONSES[val] || "great choice");
@@ -401,9 +400,8 @@ foodOther.addEventListener("input", () => {
   }
 });
 
-/* =============================================================
-   SCREEN 5 — CUSTOM INTERACTIVE NOTES FLOW
-   ============================================================= */
+// ===== note page =====
+// two stages, teaser image first then the actual textbox
 const noteStageTeaser = document.getElementById("noteStageTeaser");
 const noteStageInput = document.getElementById("noteStageInput");
 const noteTypingReact = document.getElementById("noteTypingReact");
@@ -428,8 +426,8 @@ function runAddAskScreenSequence() {
 noteBox.addEventListener("focus", () => {
   noteTypingReact.hidden = false;
 });
-noteBox.addEventListener("input", () => { 
-  state.note = noteBox.value.trim(); 
+noteBox.addEventListener("input", () => {
+  state.note = noteBox.value.trim();
   if (state.note) {
     noteTypingReact.hidden = false;
   }
@@ -438,52 +436,16 @@ noteBox.addEventListener("input", () => {
 document.getElementById("noteOpenBtn").addEventListener("click", () => {
   noteStageTeaser.hidden = true;
   noteStageInput.hidden = false;
-  noteBox.focus(); 
+  noteBox.focus();
 });
 
-/* =============================================================
-   SCREEN 6 — INSTAGRAM CAROUSEL CONTROLLER
-   ============================================================= */
-const igTrack = document.getElementById("igTrack");
-const igSlides = igTrack ? [...igTrack.children] : [];
-const igDots = document.getElementById("igDots");
-let igIndex = 0;
-
-function igRender() {
-  igTrack.style.transform = `translateX(-${igIndex * 100}%)`;
-  [...igDots.children].forEach((dot, idx) => dot.classList.toggle("on", idx === igIndex));
-}
-
-function runReasonsScreenSequence() {
-  igIndex = 0;
-  igRender();
-}
-
-if (igTrack) {
-  igDots.innerHTML = "";
-  igSlides.forEach((_, idx) => {
-    const dotMark = document.createElement("span");
-    dotMark.className = "ig-dotmark" + (idx === 0 ? " on" : "");
-    igDots.appendChild(dotMark);
-  });
-  document.getElementById("igNext").addEventListener("click", () => {
-    igIndex = (igIndex + 1) % igSlides.length;
-    igRender();
-  });
-  document.getElementById("igPrev").addEventListener("click", () => {
-    igIndex = (igIndex - 1 + igSlides.length) % igSlides.length;
-    igRender();
-  });
-}
-
-/* =============================================================
-   SCREEN 7 — LIVE ITINERARY & DYNAMIC QR SUMMARY
-   ============================================================= */
+// ===== summary / the itinerary =====
+// just dumps her choices into the receipt. snap qr is a plain image in the html now
 function runSummaryScreenSequence() {
   document.getElementById("summaryDay").textContent = state.day || "Selected Day";
   document.getElementById("summaryTime").textContent = state.time || "Selected Time";
   document.getElementById("summaryFood").textContent = state.food || "Craved Food";
-  
+
   const noteRow = document.getElementById("summaryNoteRow");
   if (state.note) {
     document.getElementById("summaryNote").textContent = state.note;
@@ -491,28 +453,9 @@ function runSummaryScreenSequence() {
   } else {
     noteRow.style.display = "none";
   }
-
-  if (!qrGenerated) {
-    const qrTargetContainer = document.getElementById("qrcode");
-    qrTargetContainer.innerHTML = "";
-    
-    // --- PRIVATE CONFIGURATION GATEWAY ---
-    // Swap this out with your personal note or calendar link privately!
-    const targetUrl = ""; 
-    
-    new QRCode(qrTargetContainer, {
-      text: targetUrl,
-      width: 140,
-      height: 140,
-      colorDark : "#3a2e35",
-      colorLight : "#ffffff",
-      correctLevel : QRCode.CorrectLevel.H
-    });
-    qrGenerated = true;
-  }
 }
 
-/* ---------- Static Interaction Bindings ---------- */
+// ----- buttons that just go to the next screen -----
 document.querySelector('[data-action="say-yes"]').addEventListener("click", () => {
   const vid = document.getElementById("yesVideo");
   if (vid) { vid.load(); }
@@ -522,30 +465,25 @@ document.querySelector('[data-action="say-yes"]').addEventListener("click", () =
 document.getElementById("startJourneyBtn").addEventListener("click", () => { show("ask2"); });
 document.getElementById("videoNextBtn").addEventListener("click", () => { show("date"); });
 document.getElementById("dateNextBtn").addEventListener("click", () => { show("time"); });
-
-document.getElementById("timeNextBtn").addEventListener("click", () => {
-  show("timeout");
-});
-
+document.getElementById("timeNextBtn").addEventListener("click", () => { show("timeout"); });
 document.getElementById("foodNextBtn").addEventListener("click", () => { show("addask"); });
-document.getElementById("addaskNextBtn").addEventListener("click", () => { show("reasons"); });
-document.getElementById("reasonsNextBtn").addEventListener("click", () => { show("summary"); });
+// dropped the reasons/insta thing, just go straight to the summary
+document.getElementById("addaskNextBtn").addEventListener("click", () => { show("summary"); });
 
-/* =============================================================
-   CENTER EDGE SYSTEM NAVIGATION Matrix
-   ============================================================= */
-const ORDER = ["ask1","ask2","afteryes","date","time","timeout","food","addask","reasons","summary"];
+// ===== the back/forward arrows =====
+const ORDER = ["ask1","ask2","afteryes","date","time","timeout","food","addask","summary"];
 const NAV_HIDDEN_ON = ["ask1","ask2","timeout","summary"];
 const navBack = document.getElementById("navBack");
 const navFwd  = document.getElementById("navFwd");
 
+// cant go forward till the current screen is actually answered
 function forwardAllowed(screen) {
   switch (screen) {
-    case "afteryes": return videoDone;   
-    case "date": return !!state.day;     
+    case "afteryes": return videoDone;
+    case "date": return !!state.day;
     case "time": return !!state.time;
     case "food": return !!state.food;
-    default:     return true;            
+    default:     return true;
   }
 }
 
@@ -571,5 +509,5 @@ navFwd.addEventListener("click", () => {
   }
 });
 
-// Kickoff
+// go
 show("ask1");
