@@ -92,29 +92,20 @@ function runYesSequence() {
   const img1 = document.getElementById("yesImg1");
   const img2 = document.getElementById("yesImg2");
   const vid  = document.getElementById("yesVideo");
+  const inlineNext = document.getElementById("videoNextBtnReveal");
 
   [img1, img2, vid].forEach(el => el.classList.remove("show"));
+  inlineNext.classList.remove("show"); 
   vid.pause(); 
   vid.currentTime = 0;
   
   videoDone = false;
   updateNav(); 
 
-  setTimeout(() => { 
-    if (currentScreen === "afteryes") img1.classList.add("show"); 
-  }, 50);
-  
-  setTimeout(() => { 
-    if (currentScreen === "afteryes") img1.classList.remove("show"); 
-  }, 50 + YES_HOLD);
-  
-  setTimeout(() => { 
-    if (currentScreen === "afteryes") img2.classList.add("show"); 
-  }, 50 + YES_HOLD + YES_FADE);
-  
-  setTimeout(() => { 
-    if (currentScreen === "afteryes") img2.classList.remove("show"); 
-  }, 50 + YES_HOLD + YES_FADE + YES_HOLD);
+  setTimeout(() => { if (currentScreen === "afteryes") img1.classList.add("show"); }, 50);
+  setTimeout(() => { if (currentScreen === "afteryes") img1.classList.remove("show"); }, 50 + YES_HOLD);
+  setTimeout(() => { if (currentScreen === "afteryes") img2.classList.add("show"); }, 50 + YES_HOLD + YES_FADE);
+  setTimeout(() => { if (currentScreen === "afteryes") img2.classList.remove("show"); }, 50 + YES_HOLD + YES_FADE + YES_HOLD);
   
   const vidStart = 50 + YES_HOLD + YES_FADE + YES_HOLD + YES_FADE;
   setTimeout(() => {
@@ -123,20 +114,25 @@ function runYesSequence() {
     
     vid.play().catch(() => {
       videoDone = true;
+      inlineNext.classList.add("show");
       updateNav();
     });
   }, vidStart);
 
   vid.onended = () => {
     videoDone = true;
+    updateNav(); 
     if (currentScreen === "afteryes") {
-      updateNav(); 
+      inlineNext.classList.add("show");
     }
   };
 
   vid.onerror = () => {
     videoDone = true;
-    if (currentScreen === "afteryes") updateNav();
+    if (currentScreen === "afteryes") {
+      inlineNext.classList.add("show");
+      updateNav();
+    }
   };
 }
 
@@ -150,7 +146,7 @@ let badDayTimer = null;
 const DAYS = {
   "Thursday 04 June": {
     good: true,
-    img: "resources/800d8afdfa4443fda08fdf2c89e16629(3).jpg",
+    img: "resources/a.jpeg", 
     caption: "great choice",
   },
   "Sunday 07 June": {
@@ -176,10 +172,7 @@ function runDateScreenSequence() {
 
   [qText, options].forEach(el => el.classList.remove("show"));
 
-  // Beat 1: Float the question row into position first
   setTimeout(() => { if (currentScreen === "date") qText.classList.add("show"); }, 200);
-
-  // Beat 2: Hand her the choice options to interact with right after
   setTimeout(() => { if (currentScreen === "date") options.classList.add("show"); }, 1100);
 }
 
@@ -231,6 +224,10 @@ document.querySelector('[data-action="say-yes"]').addEventListener("click", () =
 
 document.getElementById("startJourneyBtn").addEventListener("click", () => {
   show("ask2");
+});
+
+document.getElementById("videoNextBtn").addEventListener("click", () => {
+  show("date"); 
 });
 
 /* =============================================================

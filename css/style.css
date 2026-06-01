@@ -159,6 +159,21 @@ body {
   border-radius: 95px 25px 120px 15px / 15px 110px 25px 95px;
 }
 
+/* Post-Video Card Button Styling */
+.btn-yes-next {
+  background: var(--accent);
+  color: white;
+  font-size: 1.4rem;
+  padding: 10px 36px;
+  box-shadow: 3px 3px 0px var(--ink);
+  border: 3px solid var(--ink);
+  border-radius: 80px 15px 75px 12px / 14px 70px 12px 85px;
+}
+.btn-yes-next:hover {
+  transform: scale(1.05) rotate(2deg);
+  box-shadow: 1px 1px 0px var(--ink);
+}
+
 /* Invisible Absolute Region container frame around the "No" button */
 .no-trigger-region {
   padding: 40px 50px; 
@@ -178,7 +193,7 @@ body {
   padding: 10px 24px; 
   box-shadow: 3px 3px 0px var(--ink); 
   margin: 0; 
-  pointer-events: none; /* Passes hover detection transparently through to parent region */
+  pointer-events: none; 
 }
 
 .arrow-next {
