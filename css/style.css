@@ -204,6 +204,22 @@ body {
   box-shadow: 0 12px 40px rgba(0,0,0,.55);
 }
 .bg-spirited .reaction { color: #fff; }
+
+/* ---------- note page images + textarea over background ---------- */
+.note-imgs {
+  display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;
+  margin-bottom: 22px;
+}
+.note-imgs img {
+  width: 150px; max-width: 28vw;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0,0,0,.5);
+  object-fit: cover;
+}
+.bg-spirited .textarea {
+  background: rgba(255,255,255,.92);
+  max-width: 480px; margin-left: auto; margin-right: auto;
+}
 .btn-row {
   display: flex; align-items: center; justify-content: center;
   gap: 18px; position: relative; min-height: 80px;
