@@ -17,6 +17,16 @@ function show(name) {
     }
   });
   window.scrollTo(0, 0);
+
+  // when the ask screen loads, pop the image in
+  if (name === "ask2") {
+    const pop = document.getElementById("askPop");
+    if (pop) {
+      pop.classList.remove("animate__animated", "animate__zoomIn");
+      void pop.offsetWidth;
+      pop.classList.add("animate__animated", "animate__zoomIn");
+    }
+  }
 }
 
 /* ---------- audio (start on click only, so browsers allow it) ---------- */
@@ -51,47 +61,17 @@ noBtn.addEventListener("mouseover", () => {
   noBtn.style.transform = `translate(${dx}px, ${dy}px)`;
 });
 
-// YES → song1 + confetti + go to the three-meme sequence
+// YES → song1 + confetti + go to the post-yes screen
 document.querySelector('[data-action="say-yes"]').addEventListener("click", () => {
   play(song1);
   pop();
-  show("memes");
-  runMemeSequence();
+  show("afteryes");
 });
-
-/* =============================================================
-   SCREEN 1b — three-meme timed sequence
-   meme0 -> (1.5s) meme1 -> (1.5s) meme2 -> (1.8s) Date screen
-   tweak the timings here:
-   ============================================================= */
-const SEQ_GAP = 1500;     // ms between memes
-const SEQ_OUTRO = 1800;   // ms to linger on last meme before Date screen
-function runMemeSequence() {
-  const memes = [...document.querySelectorAll(".seq-meme")];
-  memes.forEach(m => { m.hidden = true; m.classList.remove("animate__animated", "animate__bounceIn"); });
-  let i = 0;
-  const reveal = () => {
-    if (i < memes.length) {
-      const m = memes[i];
-      m.hidden = false;
-      m.classList.add("animate__animated", "animate__bounceIn");
-      i++;
-      setTimeout(reveal, SEQ_GAP);
-    } else {
-      setTimeout(() => show("date"), SEQ_OUTRO);
-    }
-  };
-  reveal();
-}
 
 /* =============================================================
    SCREEN 2 — DATE  (Friday is a trap that bounces back)
    ============================================================= */
 const dateReaction = document.getElementById("dateReaction");
-const dayReactions = {
-  Thursday: "Thursday it is — good shout. 😌",
-  Sunday:   "Sunday, lovely. lazy energy, I respect it.",
-};
 document.querySelectorAll('[data-choice="day"]').forEach(btn => {
   btn.addEventListener("click", () => {
     const val = btn.dataset.value;
@@ -103,20 +83,18 @@ document.querySelectorAll('[data-choice="day"]').forEach(btn => {
       return; // do NOT record, do NOT advance
     }
     state.day = val;
-    dateReaction.textContent = dayReactions[val] || "";
-    setTimeout(() => show("time"), 900);
+    dateReaction.textContent = "";
+    setTimeout(() => show("time"), 450);
   });
 });
 
 /* =============================================================
    SCREEN 3 — TIME
    ============================================================= */
-const timeReaction = document.getElementById("timeReaction");
 document.querySelectorAll('[data-choice="time"]').forEach(btn => {
   btn.addEventListener("click", () => {
     state.time = btn.dataset.value;
-    timeReaction.textContent = "perfect.";
-    setTimeout(() => show("food"), 700);
+    setTimeout(() => show("food"), 350);
   });
 });
 
@@ -127,12 +105,13 @@ const foodOther = document.getElementById("foodOther");
 const foodReaction = document.getElementById("foodReaction");
 const foodNext = document.getElementById("foodNext");
 
-// EDIT these little reactions per option if you want
+// Reaction lines per food option. Empty = no text shown.
+// Fill these in YOUR voice if you want a line, or leave "" for none.
 const foodReactions = {
-  "Ramen": "ramen — slurpable, perfect first-date food.",
-  "Pho": "pho, warm and easy. great pick.",
-  "Dumplings": "dumplings. shareable. dangerous (in a good way).",
-  "Poke / rice bowl": "fresh and light, nice.",
+  "Ramen": "",
+  "Pho": "",
+  "Dumplings": "",
+  "Poke / rice bowl": "",
 };
 
 document.querySelectorAll('[data-choice="food"]').forEach(btn => {
@@ -157,7 +136,6 @@ document.querySelectorAll('[data-choice="food"]').forEach(btn => {
 foodOther.addEventListener("input", () => {
   const v = foodOther.value.trim();
   state.food = v || null;
-  foodReaction.textContent = v ? "ooh, noted." : "";
   foodNext.hidden = !v;
 });
 

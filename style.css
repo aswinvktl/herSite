@@ -79,6 +79,63 @@ body {
   line-height: 1.05;
   margin: 0 0 30px;
 }
+
+/* ---------- full-bleed Spirited Away ask screens (no boxes) ---------- */
+.bg-spirited {
+  background-image: url('resources/Spirited Away.jpeg');
+  background-size: cover;
+  background-position: center;
+}
+/* subtle dark veil so text stays readable over the art */
+.bg-spirited::before {
+  content: "";
+  position: absolute; inset: 0;
+  background: linear-gradient(180deg, rgba(0,0,0,.15), rgba(0,0,0,.45));
+  z-index: 0;
+}
+.ask-wrap {
+  position: relative; z-index: 2;
+  max-width: 760px; text-align: center;
+  color: #fff;
+  text-shadow: 0 2px 18px rgba(0,0,0,.55);
+  padding: 24px;
+}
+.joke-q {
+  font-family: var(--display);
+  font-size: clamp(2rem, 5vw, 3.4rem);
+  line-height: 1.1; margin: 0;
+}
+.bg-spirited .joke-punch {
+  font-family: var(--body);
+  font-size: clamp(1.1rem, 3vw, 1.6rem);
+  opacity: .95; margin: 0 0 48px; /* space before the ask */
+}
+.bg-spirited .ask {
+  font-family: var(--display);
+  font-size: clamp(2.4rem, 6vw, 4rem);
+  margin: 0 0 40px;
+}
+.arrow-next {
+  margin-top: 40px;
+  width: 64px; height: 64px;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  background: rgba(255,255,255,.12);
+  color: #fff; font-size: 1.8rem; cursor: pointer;
+  backdrop-filter: blur(4px);
+  transition: transform .15s ease, background .2s ease;
+}
+.arrow-next:hover { transform: scale(1.1); background: rgba(255,255,255,.28); }
+
+/* image that pops in on the ask screen */
+.ask-pop {
+  position: absolute;
+  bottom: 6%; right: 6%;
+  width: 220px; max-width: 32vw;
+  border-radius: 14px;
+  box-shadow: 0 12px 40px rgba(0,0,0,.5);
+  z-index: 3;
+}
 .btn-row {
   display: flex; align-items: center; justify-content: center;
   gap: 18px; position: relative; min-height: 80px;
