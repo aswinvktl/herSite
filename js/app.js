@@ -5,6 +5,7 @@
 const state = { day: null, time: null, food: null, note: "" };
 let currentScreen = "ask1";
 let videoDone = false;
+let qrGenerated = false; // Flag to prevent generating multiple QR codes layout elements
 
 /* ---------- Core Screen Switching Matrix ---------- */
 const screens = document.querySelectorAll(".screen");
@@ -29,6 +30,7 @@ function show(name) {
   if (name === "food") runFoodScreenSequence();
   if (name === "addask") runAddAskScreenSequence();
   if (name === "reasons") runReasonsScreenSequence();
+  if (name === "summary") runSummaryScreenSequence(); // Initialize Grand Summary Receipt
   
   updateNav();
 }
@@ -163,7 +165,6 @@ function runDateScreenSequence() {
   [qText, options].forEach(el => el.classList.remove("show"));
   dateNextBtnReveal.classList.remove("show");
   
-  // Explicit inline style override ensures Peppa Pig is completely hidden on entry
   dayReact.style.display = "none"; 
   dateReaction.textContent = "";
 
@@ -175,7 +176,7 @@ function showDayReact(info) {
   dateReaction.textContent = info.caption;
   dayReact.onerror = () => { dayReact.style.display = "none"; }; 
   dayReact.src = info.img;
-  dayReact.style.display = "block"; // Safely display layout block matching your CSS setup
+  dayReact.style.display = "block"; 
   
   dayReact.style.transform = "scale(0.9)";
   dayReact.style.transition = "transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.25)";
@@ -224,7 +225,6 @@ function runTimeScreenSequence() {
   [qText, options].forEach(el => el.classList.remove("show"));
   timeNextBtnReveal.classList.remove("show");
   
-  // Enforces Anthony Mackie remains locked away invisible on entry
   timeReact.style.display = "none"; 
   timeReaction.textContent = "";
 
@@ -236,7 +236,7 @@ document.querySelectorAll('[data-choice="time"]').forEach(btn => {
   btn.addEventListener("click", () => {
     state.time = btn.dataset.value;
     timeReaction.textContent = "great choice again";
-    timeReact.style.display = "none"; // Mackie stays hidden while clicking chips
+    timeReact.style.display = "none"; 
 
     timeNextBtnReveal.classList.add("show"); 
     updateNav();
@@ -448,6 +448,43 @@ if (igTrack) {
   });
 }
 
+/* =============================================================
+   SCREEN 7 — LIVE ITINERARY & DYNAMIC QR SUMMARY
+   ============================================================= */
+function runSummaryScreenSequence() {
+  document.getElementById("summaryDay").textContent = state.day || "Selected Day";
+  document.getElementById("summaryTime").textContent = state.time || "Selected Time";
+  document.getElementById("summaryFood").textContent = state.food || "Craved Food";
+  
+  const noteRow = document.getElementById("summaryNoteRow");
+  if (state.note) {
+    document.getElementById("summaryNote").textContent = state.note;
+    noteRow.style.display = "flex";
+  } else {
+    noteRow.style.display = "none";
+  }
+
+  // Generate the custom QR code payload precisely on entry
+  if (!qrGenerated) {
+    const qrTargetContainer = document.getElementById("qrcode");
+    qrTargetContainer.innerHTML = ""; // Hard reset layer
+    
+    // --- PRIVATE CONFIGURATION GATEWAY ---
+    // Swap "https://google.com" out with your personal note or calendar link privately!
+    const targetUrl = "https://google.com"; 
+    
+    new QRCode(qrTargetContainer, {
+      text: targetUrl,
+      width: 140,
+      height: 140,
+      colorDark : "#3a2e35", // var(--ink) matching configuration hex
+      colorLight : "#ffffff",
+      correctLevel : QRCode.CorrectLevel.H
+    });
+    qrGenerated = true;
+  }
+}
+
 /* ---------- Static Interaction Bindings ---------- */
 document.querySelector('[data-action="say-yes"]').addEventListener("click", () => {
   const vid = document.getElementById("yesVideo");
@@ -459,9 +496,8 @@ document.getElementById("startJourneyBtn").addEventListener("click", () => { sho
 document.getElementById("videoNextBtn").addEventListener("click", () => { show("date"); });
 document.getElementById("dateNextBtn").addEventListener("click", () => { show("time"); });
 
-// Trigger sequence for Anthony Mackie popping up ONLY upon clicking the card's next button
 document.getElementById("timeNextBtn").addEventListener("click", () => {
-  timeReact.style.display = "block"; // Swapped out hidden framework cleanly
+  timeReact.style.display = "block"; 
   timeReact.style.transform = "scale(0.9)";
   timeReact.style.transition = "transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.25)";
   setTimeout(() => { timeReact.style.transform = "scale(1)"; }, 20);
@@ -470,15 +506,13 @@ document.getElementById("timeNextBtn").addEventListener("click", () => {
 
 document.getElementById("foodNextBtn").addEventListener("click", () => { show("addask"); });
 document.getElementById("addaskNextBtn").addEventListener("click", () => { show("reasons"); });
-document.getElementById("reasonsNextBtn").addEventListener("click", () => {
-  alert("End Page coming up next! Current selections saved: " + JSON.stringify(state));
-});
+document.getElementById("reasonsNextBtn").addEventListener("click", () => { show("summary"); });
 
 /* =============================================================
    CENTER EDGE SYSTEM NAVIGATION Matrix
    ============================================================= */
-const ORDER = ["ask1","ask2","afteryes","date","time","timeout","food","addask","reasons"];
-const NAV_HIDDEN_ON = ["ask1","ask2","timeout"]; 
+const ORDER = ["ask1","ask2","afteryes","date","time","timeout","food","addask","reasons","summary"];
+const NAV_HIDDEN_ON = ["ask1","ask2","timeout","summary"]; // Hide navigation bar completely at the final receipt stop
 const navBack = document.getElementById("navBack");
 const navFwd  = document.getElementById("navFwd");
 
