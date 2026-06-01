@@ -383,7 +383,7 @@ function renderQR() {
    (ask1) and last (summary). Forward is only allowed once the
    current step's required choice is made.
    ============================================================= */
-const ORDER = ["ask1","ask2","afteryes","date","time","timeout","food","addask","reasons","interested","summary"];
+const ORDER = ["ask1","ask2","afteryes","date","time","timeout","food","addask","reasons","summary"];
 const NAV_HIDDEN_ON = ["ask1","summary"];           // no arrows here
 const NAV_NO_FORWARD = ["ask2","timeout"];          // these advance by their own controls
 

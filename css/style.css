@@ -342,6 +342,11 @@ body {
      background-size: cover; background-position: center; */
 }
 .ig-slide small { font-family: var(--body); font-size: .8rem; opacity: .6; }
+.ig-slide img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: block;
+}
 .ig-arrow {
   position: absolute; top: 50%; transform: translateY(-50%);
   width: 38px; height: 38px; border-radius: 50%;
@@ -355,26 +360,38 @@ body {
 .ig-dotmark.on { background: var(--accent); }
 .ig-post .btn-next { margin: 0 12px 14px; }
 
-/* ---------- screen 7: interested ---------- */
-.big-line { font-size: 2.2rem; }
-.sheldon {
-  width: 100%; max-width: 360px;
-  border-radius: 14px; border: 2px solid var(--ink);
-  box-shadow: var(--shadow);
+/* ---------- summary screen (its own background) ---------- */
+.bg-summary {
+  /* DROP YOUR SUMMARY BACKGROUND HERE (swap the filename): */
+  background-image: url('../resources/Spirited Away.jpeg');
+  background-size: cover;
+  background-position: center;
 }
-.caption { font-style: italic; opacity: .8; margin: 10px 0 18px; }
-
-/* ---------- screen 8: summary ---------- */
-.summary-card { transform: rotate(.5deg); }
+.bg-summary::before {
+  content: "";
+  position: absolute; inset: 0;
+  background: linear-gradient(180deg, rgba(0,0,0,.25), rgba(0,0,0,.55));
+  z-index: 0;
+}
+.summary-wrap {
+  position: relative; z-index: 2;
+  text-align: center; color: #fff;
+  text-shadow: 0 2px 16px rgba(0,0,0,.55);
+  max-width: 460px; padding: 32px;
+  background: rgba(0,0,0,.30);
+  border-radius: 20px;
+  backdrop-filter: blur(3px);
+}
 .summary-list {
-  list-style: none; padding: 0; margin: 0 0 18px;
-  font-size: 1.2rem; text-align: left; display: inline-block;
+  list-style: none; padding: 0; margin: 18px 0;
+  font-size: 1.25rem; line-height: 1.9;
 }
-.summary-list li { margin: 8px 0; }
-.summary-tag { font-style: italic; opacity: .85; margin: 10px 0 14px; }
+.summary-list strong { font-family: var(--display); }
+.summary-tag { font-size: 1.05rem; margin: 18px 0 14px; }
+.summary-sub { font-size: .9rem; opacity: .85; margin: 12px 0 0; }
 .qr {
   display: inline-block; padding: 12px;
-  background: white; border: 2px solid var(--ink); border-radius: 14px;
+  background: #fff; border-radius: 14px;
 }
 .qr img { display: block; }
 
@@ -386,5 +403,5 @@ body {
   .btn-yes { font-size: 1.8rem; padding: 18px 44px; }
   .card h2 { font-size: 1.5rem; }
   .popmeme { width: 130px; }
-  .summary-card { transform: none; }
+  .summary-wrap { padding: 22px; }
 }
