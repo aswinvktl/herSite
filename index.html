@@ -8,6 +8,10 @@
 </head>
 <body>
 
+<audio id="bgMusic" loop preload="auto">
+  <source src="resources/Autumn Leaves.mp3" type="audio/mpeg" />
+</audio>
+
 <div id="stage">
 
   <button id="navBack" class="nav-arrow nav-back" aria-label="back" hidden>‹</button>
@@ -128,7 +132,7 @@
 
   <section class="screen bg-master" data-screen="food">
     <div class="cutesy-box">
-      <h2 class="day-q reveal-item" id="foodQuestionReveal" style="color: var(--ink); margin-top: 10px;">what culture do we think?</h2>
+      <h2 class="day-q reveal-item" id="foodQuestionReveal" style="color: var(--ink); margin-top: 10px;">what cuisine do we think?</h2>
       
       <div class="options reveal-item" id="foodOptionsReveal">
         <button class="opt" data-choice="food" data-value="Italian">Italian</button>
@@ -211,15 +215,11 @@
     </div>
   </section>
 
-  <!-- ========================================================
-       SCREEN 7 — THE GRAND FINALE SUMMARY RECEIPT
-  ========================================================= -->
   <section class="screen bg-master" data-screen="summary">
     <div class="cutesy-box" style="max-width: 480px;">
       <h1 class="joke-q" style="font-size: 2.2rem; margin-bottom: 5px;">it's a date! 💌</h1>
       <p class="joke-punch" style="font-size: 1rem; margin-bottom: 25px;">here is our official itinerary:</p>
       
-      <!-- Integrated Itinerary Line Items Block Container -->
       <div class="receipt-card" style="background: rgba(255, 255, 255, 0.6); border: 2px dashed var(--ink); border-radius: 12px; padding: 20px; margin-bottom: 25px; text-align: left; font-family: var(--body);">
         <div style="margin-bottom: 12px; display: flex; justify-content: space-between; border-bottom: 1.5px solid rgba(0,0,0,0.1); padding-bottom: 6px;">
           <span style="font-weight: 700; color: var(--ink);">📅 Day:</span>
@@ -239,7 +239,6 @@
         </div>
       </div>
 
-      <!-- Live Dynamic QR Code Insertion Target Node Framework -->
       <div style="display: flex; flex-direction: column; align-items: center; gap: 10px;">
         <div id="qrcode" style="padding: 12px; background: white; border: 3px solid var(--ink); border-radius: 16px; box-shadow: 4px 4px 0 var(--ink); display: inline-block;"></div>
         <p style="font-family: var(--body); font-size: 0.85rem; font-weight: 700; color: var(--ink); margin-top: 8px; max-width: 260px; line-height: 1.3;">scan this to save our plan or open a surprise! ✨</p>

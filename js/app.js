@@ -5,7 +5,28 @@
 const state = { day: null, time: null, food: null, note: "" };
 let currentScreen = "ask1";
 let videoDone = false;
-let qrGenerated = false; // Flag to prevent generating multiple QR codes layout elements
+let qrGenerated = false;
+
+/* ---------- Background music ---------- */
+const bgMusic = document.getElementById("bgMusic");
+let musicStarted = false;
+function startMusic() {
+  if (musicStarted || !bgMusic) return;
+  bgMusic.volume = 0.55;
+  bgMusic.play().then(() => { musicStarted = true; }).catch(() => {/* will retry on next interaction */});
+}
+// kick it off on the first interaction anywhere (autoplay policies need a gesture)
+document.addEventListener("click", startMusic, { once: false });
+document.addEventListener("touchstart", startMusic, { once: false });
+
+function duckMusicForVideo(vid) {
+  if (!bgMusic) return;
+  bgMusic.pause();
+  const resume = () => { if (currentScreen) bgMusic.play().catch(() => {}); };
+  vid.addEventListener("ended", resume, { once: true });
+  vid.addEventListener("error", resume, { once: true });
+  vid.addEventListener("pause", resume, { once: true });
+}
 
 /* ---------- Core Screen Switching Matrix ---------- */
 const screens = document.querySelectorAll(".screen");
@@ -30,7 +51,7 @@ function show(name) {
   if (name === "food") runFoodScreenSequence();
   if (name === "addask") runAddAskScreenSequence();
   if (name === "reasons") runReasonsScreenSequence();
-  if (name === "summary") runSummaryScreenSequence(); // Initialize Grand Summary Receipt
+  if (name === "summary") runSummaryScreenSequence();
   
   updateNav();
 }
@@ -118,10 +139,12 @@ function runYesSequence() {
   setTimeout(() => {
     if (currentScreen !== "afteryes") return;
     vid.classList.add("show");
+    duckMusicForVideo(vid);   // pause bg music while the video plays, resume after
     
     vid.play().catch(() => {
       videoDone = true;
       inlineNext.classList.add("show");
+      if (bgMusic) bgMusic.play().catch(() => {});
       updateNav();
     });
   }, vidStart);
@@ -464,20 +487,19 @@ function runSummaryScreenSequence() {
     noteRow.style.display = "none";
   }
 
-  // Generate the custom QR code payload precisely on entry
   if (!qrGenerated) {
     const qrTargetContainer = document.getElementById("qrcode");
-    qrTargetContainer.innerHTML = ""; // Hard reset layer
+    qrTargetContainer.innerHTML = "";
     
     // --- PRIVATE CONFIGURATION GATEWAY ---
-    // Swap "https://google.com" out with your personal note or calendar link privately!
+    // Swap this out with your personal note or calendar link privately!
     const targetUrl = "https://google.com"; 
     
     new QRCode(qrTargetContainer, {
       text: targetUrl,
       width: 140,
       height: 140,
-      colorDark : "#3a2e35", // var(--ink) matching configuration hex
+      colorDark : "#3a2e35",
       colorLight : "#ffffff",
       correctLevel : QRCode.CorrectLevel.H
     });
@@ -512,7 +534,7 @@ document.getElementById("reasonsNextBtn").addEventListener("click", () => { show
    CENTER EDGE SYSTEM NAVIGATION Matrix
    ============================================================= */
 const ORDER = ["ask1","ask2","afteryes","date","time","timeout","food","addask","reasons","summary"];
-const NAV_HIDDEN_ON = ["ask1","ask2","timeout","summary"]; // Hide navigation bar completely at the final receipt stop
+const NAV_HIDDEN_ON = ["ask1","ask2","timeout","summary"];
 const navBack = document.getElementById("navBack");
 const navFwd  = document.getElementById("navFwd");
 
