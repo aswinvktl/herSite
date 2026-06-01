@@ -24,6 +24,7 @@ function show(name) {
   if (name === "ask2") runScreen1bSequence();
   if (name === "afteryes") runYesSequence();
   if (name === "date") runDateScreenSequence();
+  if (name === "time") runTimeScreenSequence();
   
   updateNav();
 }
@@ -141,6 +142,7 @@ function runYesSequence() {
    ============================================================= */
 const dateReaction = document.getElementById("dateReaction");
 const dayReact = document.getElementById("dayReact");
+const dateNextBtnReveal = document.getElementById("dateNextBtnReveal");
 let badDayTimer = null;
 
 const DAYS = {
@@ -171,6 +173,7 @@ function runDateScreenSequence() {
   const options = document.getElementById("dateOptionsReveal");
 
   [qText, options].forEach(el => el.classList.remove("show"));
+  dateNextBtnReveal.classList.remove("show"); // Reset card button layout
 
   setTimeout(() => { if (currentScreen === "date") qText.classList.add("show"); }, 200);
   setTimeout(() => { if (currentScreen === "date") options.classList.add("show"); }, 1100);
@@ -195,6 +198,7 @@ document.querySelectorAll('[data-choice="day"]').forEach(btn => {
 
     if (!info.good) {
       state.day = null;            
+      dateNextBtnReveal.classList.remove("show");
       updateNav(); 
       showDayReact(info);
       
@@ -209,7 +213,44 @@ document.querySelectorAll('[data-choice="day"]').forEach(btn => {
     clearTimeout(badDayTimer);
     state.day = val;
     showDayReact(info);
+    dateNextBtnReveal.classList.add("show"); // Pops up the card's 'next' button cleanly!
     updateNav(); 
+  });
+});
+
+/* =============================================================
+   SCREEN 3 — TIME PICKER TIMELINE SELECTIONS
+   ============================================================= */
+const timeReaction = document.getElementById("timeReaction");
+const timeReact = document.getElementById("timeReact");
+const timeNextBtnReveal = document.getElementById("timeNextBtnReveal");
+
+function runTimeScreenSequence() {
+  const qText = document.getElementById("timeQuestionReveal");
+  const options = document.getElementById("timeOptionsReveal");
+
+  [qText, options].forEach(el => el.classList.remove("show"));
+  timeNextBtnReveal.classList.remove("show");
+  timeReact.hidden = true;
+  timeReaction.textContent = "";
+
+  setTimeout(() => { if (currentScreen === "time") qText.classList.add("show"); }, 200);
+  setTimeout(() => { if (currentScreen === "time") options.classList.add("show"); }, 1100);
+}
+
+document.querySelectorAll('[data-choice="time"]').forEach(btn => {
+  btn.addEventListener("click", () => {
+    state.time = btn.dataset.value;
+    timeReaction.textContent = "great choice again";
+    timeReact.hidden = false;
+    
+    // Smooth custom pop drop animation
+    timeReact.style.transform = "scale(0.9)";
+    timeReact.style.transition = "transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.25)";
+    setTimeout(() => { timeReact.style.transform = "scale(1)"; }, 20);
+
+    timeNextBtnReveal.classList.add("show"); // Reveal the next action controller button!
+    updateNav();
   });
 });
 
@@ -230,10 +271,20 @@ document.getElementById("videoNextBtn").addEventListener("click", () => {
   show("date"); 
 });
 
+document.getElementById("dateNextBtn").addEventListener("click", () => {
+  show("time"); 
+});
+
+document.getElementById("timeNextBtn").addEventListener("click", () => {
+  // Proceed straight into your system timeout water break screen
+  const target = document.querySelector('[data-screen="timeout"]') ? "timeout" : "date";
+  show(target); 
+});
+
 /* =============================================================
    CENTER EDGE SYSTEM NAVIGATION Matrix
    ============================================================= */
-const ORDER = ["ask1","ask2","afteryes","date"];
+const ORDER = ["ask1","ask2","afteryes","date","time"];
 const NAV_HIDDEN_ON = ["ask1","ask2"]; 
 const navBack = document.getElementById("navBack");
 const navFwd  = document.getElementById("navFwd");
@@ -242,6 +293,7 @@ function forwardAllowed(screen) {
   switch (screen) {
     case "afteryes": return videoDone;   
     case "date": return !!state.day;     
+    case "time": return !!state.time;
     default:     return true;            
   }
 }
