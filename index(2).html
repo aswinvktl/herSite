@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>•ᴗ•</title>
+  <!-- local libs only — nothing loads from a CDN, so adblock/Brave can't break it -->
+  <link rel="stylesheet" href="lib/animate.min.css" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<!-- ============================================================
+     AUDIO  (files go in /audio, swap the src filenames)
+     song1 = memey-romantic song for the YES moment (screen 1)
+     song2 = memey song for the "you're interested huh" moment (screen 8)
+============================================================ -->
+<audio id="song1" loop preload="auto">
+  <source src="audio/REPLACE_song1.mp3" type="audio/mpeg" />
+</audio>
+<audio id="song2" loop preload="auto">
+  <source src="audio/REPLACE_song2.mp3" type="audio/mpeg" />
+</audio>
+
+<div id="stage">
+
+  <!-- ========================================================
+       SCREEN 1 — HOME / THE ASK
+  ========================================================= -->
+  <section class="screen is-active" data-screen="home">
+    <div class="card home-card">
+      <p class="joke-setup">Why did the calendar feel proud?</p>
+      <p class="joke-punch">Because it had a lot of dates. HAHAHAHAH</p>
+      <h1 class="ask">can I have one with u?</h1>
+
+      <div class="btn-row">
+        <button class="btn btn-yes" data-action="say-yes">YES</button>
+        <button class="btn btn-no" id="noBtn" data-action="hover-no">no</button>
+      </div>
+    </div>
+
+    <!-- Cynthia Erivo meme that pops on No-hover -->
+    <img class="popmeme" id="noMeme"
+         src="memes/02-no-hover/REPLACE_cynthia.jpg"
+         alt="nice try" hidden />
+  </section>
+
+  <!-- ========================================================
+       SCREEN 1b — THE THREE-MEME SEQUENCE (after YES)
+       auto-advances: meme1 -> meme2 -> meme3 -> Date screen
+  ========================================================= -->
+  <section class="screen" data-screen="memes">
+    <div class="meme-sequence">
+      <img class="seq-meme" data-seq="0"
+           src="memes/01-home-reward/REPLACE_defying-gravity.jpg" alt="" hidden />
+      <img class="seq-meme" data-seq="1"
+           src="memes/01-home-reward/REPLACE_jordan.jpg" alt="" hidden />
+      <img class="seq-meme" data-seq="2"
+           src="memes/01-home-reward/REPLACE_praise-the-lord.jpg" alt="" hidden />
+    </div>
+  </section>
+
+  <!-- ========================================================
+       SCREEN 2 — DATE (pick a day)
+       Thursday / Sunday = real. Friday = bounces back (the bit).
+  ========================================================= -->
+  <section class="screen" data-screen="date">
+    <div class="card">
+      <h2>okay. when are you free?</h2>
+      <div class="options">
+        <button class="opt" data-choice="day" data-value="Thursday">Thursday</button>
+        <button class="opt" data-choice="day" data-value="Sunday">Sunday</button>
+        <button class="opt opt-trap" data-choice="day" data-value="Friday">Friday</button>
+      </div>
+      <p class="reaction" id="dateReaction"></p>
+      <!-- per-day reaction memes (optional) live in memes/04-date -->
+    </div>
+  </section>
+
+  <!-- ========================================================
+       SCREEN 3 — TIME
+  ========================================================= -->
+  <section class="screen" data-screen="time">
+    <div class="card">
+      <h2>and what time works?</h2>
+      <div class="options">
+        <button class="opt" data-choice="time" data-value="Afternoon (~2pm)">Afternoon</button>
+        <button class="opt" data-choice="time" data-value="Evening (~6pm)">Evening</button>
+        <button class="opt" data-choice="time" data-value="Night (~8pm)">Night</button>
+      </div>
+      <p class="reaction" id="timeReaction"></p>
+    </div>
+  </section>
+
+  <!-- ========================================================
+       SCREEN 4 — FOOD  ("what would you LIKE")
+       light / easy options + an "other" text field
+  ========================================================= -->
+  <section class="screen" data-screen="food">
+    <div class="card">
+      <h2>what would you like to eat?</h2>
+      <div class="options">
+        <!-- EDIT these to your real light/easy picks -->
+        <button class="opt" data-choice="food" data-value="Ramen">Ramen</button>
+        <button class="opt" data-choice="food" data-value="Pho">Pho</button>
+        <button class="opt" data-choice="food" data-value="Dumplings">Dumplings</button>
+        <button class="opt" data-choice="food" data-value="Poke / rice bowl">Poke bowl</button>
+        <button class="opt opt-other" data-choice="food" data-value="__other__">something else…</button>
+      </div>
+      <input type="text" id="foodOther" class="textfield" hidden
+             placeholder="go on then, what are you craving?" maxlength="80" />
+      <p class="reaction" id="foodReaction"></p>
+      <button class="btn btn-next" id="foodNext" hidden data-action="goto" data-target="addask">next →</button>
+      <!-- per-food memes live in memes/06-food -->
+    </div>
+  </section>
+
+  <!-- ========================================================
+       SCREEN 5 — ANYTHING TO ADD / ASK
+  ========================================================= -->
+  <section class="screen" data-screen="addask">
+    <div class="card">
+      <h2>anything you want to add or ask?</h2>
+      <textarea id="noteBox" class="textarea"
+                placeholder="a specific snack? a dealbreaker? nothing? all valid."
+                maxlength="300"></textarea>
+      <button class="btn btn-next" data-action="goto" data-target="reasons">next →</button>
+    </div>
+  </section>
+
+  <!-- ========================================================
+       SCREEN 6 — REASONS YOU SHOULD DATE ME (IG carousel, 5 slides)
+  ========================================================= -->
+  <section class="screen" data-screen="reasons">
+    <div class="ig-post">
+      <div class="ig-head">
+        <span class="ig-dot"></span>
+        <span class="ig-handle">reasons_you_should_date_me</span>
+      </div>
+
+      <div class="ig-frame">
+        <div class="ig-track" id="igTrack">
+          <!-- 5 slides — drop image or text in each -->
+          <div class="ig-slide"><span>REASON 1<br><small>(swap me)</small></span></div>
+          <div class="ig-slide"><span>REASON 2<br><small>(swap me)</small></span></div>
+          <div class="ig-slide"><span>REASON 3<br><small>(swap me)</small></span></div>
+          <div class="ig-slide"><span>REASON 4<br><small>(swap me)</small></span></div>
+          <div class="ig-slide"><span>REASON 5<br><small>(swap me)</small></span></div>
+        </div>
+        <button class="ig-arrow ig-prev" id="igPrev" aria-label="prev">‹</button>
+        <button class="ig-arrow ig-next" id="igNext" aria-label="next">›</button>
+      </div>
+
+      <div class="ig-dots" id="igDots"></div>
+      <button class="btn btn-next" data-action="goto" data-target="interested">okay okay, next →</button>
+    </div>
+  </section>
+
+  <!-- ========================================================
+       SCREEN 7 — "YOU'RE INTERESTED HUH?"  (song2 + Sheldon)
+  ========================================================= -->
+  <section class="screen" data-screen="interested">
+    <div class="card">
+      <h2 class="big-line">you're interested huh? 😏</h2>
+      <img class="sheldon"
+           src="memes/08-interested/REPLACE_sheldon.jpg"
+           alt="me making this for you" />
+      <p class="caption">me making this for you</p>
+      <button class="btn btn-next" data-action="goto" data-target="summary">see the plan →</button>
+    </div>
+  </section>
+
+  <!-- ========================================================
+       SCREEN 8 — SUMMARY + QR
+  ========================================================= -->
+  <section class="screen" data-screen="summary">
+    <div class="card summary-card">
+      <h2>so here's the plan 🫶</h2>
+      <ul class="summary-list">
+        <li>day: <strong id="sumDay">—</strong></li>
+        <li>time: <strong id="sumTime">—</strong></li>
+        <li>food: <strong id="sumFood">—</strong></li>
+        <li id="sumNoteRow" hidden>you added: <strong id="sumNote"></strong></li>
+      </ul>
+      <p class="summary-tag">screenshot this & send it to me — scan to message:</p>
+      <div id="qr" class="qr"></div>
+    </div>
+  </section>
+
+</div>
+
+<!-- local libs -->
+<script src="lib/confetti.min.js"></script>
+<script src="lib/qrcode.min.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

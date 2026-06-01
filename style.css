@@ -1,0 +1,249 @@
+/* =============================================================
+   date-site — styles
+   Playful / handmade. Edit the CSS variables to reskin fast.
+   Fonts: distinctive display + clean body. Swap the @import if you
+   want different ones — these are self-loaded from Google Fonts;
+   if you want FULLY offline (Brave-proof fonts too), download the
+   .woff2 files into /lib and use @font-face instead.
+   ============================================================= */
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;1,9..144,500&family=Nunito:wght@400;700&display=swap');
+
+:root {
+  --bg: #fff0f3;
+  --bg2: #ffe3ec;
+  --ink: #3a2e35;
+  --accent: #ff5d8f;
+  --accent-d: #e23e73;
+  --yes: #ff5d8f;
+  --paper: #fffdfa;
+  --shadow: 0 10px 30px rgba(226, 62, 115, 0.18);
+  --display: 'Fraunces', Georgia, serif;
+  --body: 'Nunito', system-ui, sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: var(--body);
+  color: var(--ink);
+  background:
+    radial-gradient(1200px 600px at 70% -10%, var(--bg2), transparent 60%),
+    radial-gradient(900px 500px at 0% 110%, #ffe9b0, transparent 55%),
+    var(--bg);
+  overflow-x: hidden;
+}
+
+#stage { position: relative; min-height: 100vh; }
+
+/* ---------- screen fade ---------- */
+.screen {
+  position: absolute; inset: 0;
+  display: none;
+  align-items: center; justify-content: center;
+  padding: 32px;
+  opacity: 0;
+  transition: opacity .45s ease;
+}
+.screen.is-active {
+  display: flex;
+  opacity: 1;
+}
+
+/* ---------- card ---------- */
+.card {
+  background: var(--paper);
+  border: 2px solid var(--ink);
+  border-radius: 22px;
+  box-shadow: var(--shadow);
+  padding: 40px 44px;
+  max-width: 560px;
+  width: 100%;
+  text-align: center;
+  transform: rotate(-.6deg);
+}
+.card h2 {
+  font-family: var(--display);
+  font-size: 2rem;
+  margin: 0 0 24px;
+}
+
+/* ---------- screen 1: the ask ---------- */
+.home-card { transform: rotate(.4deg); }
+.joke-setup { font-size: 1.1rem; color: var(--accent-d); margin: 0; }
+.joke-punch { font-size: 1rem; opacity: .8; margin: 6px 0 22px; }
+.ask {
+  font-family: var(--display);
+  font-size: 2.6rem;
+  line-height: 1.05;
+  margin: 0 0 30px;
+}
+.btn-row {
+  display: flex; align-items: center; justify-content: center;
+  gap: 18px; position: relative; min-height: 80px;
+}
+
+.btn {
+  font-family: var(--body);
+  font-weight: 700;
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+  cursor: pointer;
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+.btn:hover { box-shadow: var(--shadow); }
+
+.btn-yes {
+  background: var(--yes);
+  color: white;
+  font-size: 2.4rem;
+  padding: 22px 64px;
+}
+.btn-yes:hover { transform: scale(1.05); }
+
+.btn-no {
+  background: var(--paper);
+  color: var(--ink);
+  font-size: .9rem;
+  padding: 8px 16px;
+  transition: transform .12s ease;
+}
+
+.popmeme {
+  position: absolute;
+  bottom: 18px; right: 18px;
+  width: 180px; max-width: 40vw;
+  border-radius: 14px;
+  border: 2px solid var(--ink);
+  box-shadow: var(--shadow);
+  z-index: 5;
+}
+
+/* ---------- screen 1b: meme sequence ---------- */
+.meme-sequence { position: relative; width: 100%; max-width: 460px; text-align: center; }
+.seq-meme {
+  width: 100%;
+  border-radius: 16px;
+  border: 2px solid var(--ink);
+  box-shadow: var(--shadow);
+}
+
+/* ---------- options ---------- */
+.options {
+  display: flex; flex-wrap: wrap; gap: 12px; justify-content: center;
+  margin-bottom: 14px;
+}
+.opt {
+  font-family: var(--body); font-weight: 700;
+  background: var(--bg2);
+  border: 2px solid var(--ink);
+  border-radius: 14px;
+  padding: 14px 22px;
+  font-size: 1.05rem;
+  cursor: pointer;
+  transition: transform .12s ease, background .2s ease;
+}
+.opt:hover { transform: translateY(-2px) rotate(-1deg); background: var(--accent); color: white; }
+.opt-trap:hover { background: #ffd2d2; color: var(--accent-d); }
+.opt-other { background: var(--paper); font-style: italic; }
+
+.reaction {
+  font-family: var(--display); font-style: italic;
+  font-size: 1.15rem; min-height: 1.4em; margin: 12px 0 0;
+}
+
+/* ---------- text inputs ---------- */
+.textfield, .textarea {
+  width: 100%;
+  font-family: var(--body); font-size: 1rem;
+  border: 2px solid var(--ink); border-radius: 12px;
+  padding: 12px 14px; margin: 6px 0 14px;
+  background: var(--paper); color: var(--ink);
+  resize: none;
+}
+.textarea { min-height: 110px; }
+
+.btn-next {
+  background: var(--accent); color: white;
+  font-size: 1.1rem; padding: 12px 30px; margin-top: 10px;
+}
+.btn-next:hover { transform: scale(1.04); }
+
+/* ---------- screen 6: IG carousel ---------- */
+.ig-post {
+  width: 100%; max-width: 440px;
+  background: var(--paper);
+  border: 2px solid var(--ink);
+  border-radius: 18px;
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+.ig-head {
+  display: flex; align-items: center; gap: 10px;
+  padding: 12px 14px; border-bottom: 1.5px solid var(--ink);
+}
+.ig-dot {
+  width: 30px; height: 30px; border-radius: 50%;
+  background: linear-gradient(45deg, var(--accent), #ffc06e);
+  border: 1.5px solid var(--ink);
+}
+.ig-handle { font-weight: 700; font-size: .95rem; }
+.ig-frame { position: relative; width: 100%; aspect-ratio: 1/1; overflow: hidden; }
+.ig-track { display: flex; height: 100%; transition: transform .4s ease; }
+.ig-slide {
+  min-width: 100%; height: 100%;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--bg2); text-align: center;
+  font-family: var(--display); font-size: 1.6rem;
+  /* to use an image instead of text, set:
+     background-image: url('memes/07-reasons/REPLACE_1.jpg');
+     background-size: cover; background-position: center; */
+}
+.ig-slide small { font-family: var(--body); font-size: .8rem; opacity: .6; }
+.ig-arrow {
+  position: absolute; top: 50%; transform: translateY(-50%);
+  width: 38px; height: 38px; border-radius: 50%;
+  border: none; background: rgba(255,255,255,.85);
+  font-size: 1.6rem; line-height: 1; cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0,0,0,.2);
+}
+.ig-prev { left: 10px; } .ig-next { right: 10px; }
+.ig-dots { display: flex; gap: 6px; justify-content: center; padding: 12px; }
+.ig-dotmark { width: 7px; height: 7px; border-radius: 50%; background: #d9b9c4; }
+.ig-dotmark.on { background: var(--accent); }
+.ig-post .btn-next { margin: 0 12px 14px; }
+
+/* ---------- screen 7: interested ---------- */
+.big-line { font-size: 2.2rem; }
+.sheldon {
+  width: 100%; max-width: 360px;
+  border-radius: 14px; border: 2px solid var(--ink);
+  box-shadow: var(--shadow);
+}
+.caption { font-style: italic; opacity: .8; margin: 10px 0 18px; }
+
+/* ---------- screen 8: summary ---------- */
+.summary-card { transform: rotate(.5deg); }
+.summary-list {
+  list-style: none; padding: 0; margin: 0 0 18px;
+  font-size: 1.2rem; text-align: left; display: inline-block;
+}
+.summary-list li { margin: 8px 0; }
+.summary-tag { font-style: italic; opacity: .85; margin: 10px 0 14px; }
+.qr {
+  display: inline-block; padding: 12px;
+  background: white; border: 2px solid var(--ink); border-radius: 14px;
+}
+.qr img { display: block; }
+
+/* ---------- mobile ---------- */
+@media (max-width: 600px) {
+  .screen { padding: 18px; }
+  .card { padding: 28px 22px; transform: none; }
+  .ask { font-size: 2rem; }
+  .btn-yes { font-size: 1.8rem; padding: 18px 44px; }
+  .card h2 { font-size: 1.5rem; }
+  .popmeme { width: 130px; }
+  .summary-card { transform: none; }
+}
