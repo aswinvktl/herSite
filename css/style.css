@@ -106,7 +106,7 @@ body {
 
 /* ---------- full-bleed Spirited Away ask screens (no boxes) ---------- */
 .bg-spirited {
-  background-image: url('resources/Spirited Away.jpeg');
+  background-image: url('../resources/Spirited Away.jpeg');
   background-size: cover;
   background-position: center;
 }
