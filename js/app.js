@@ -113,22 +113,73 @@ function runYesSequence() {
 }
 
 /* =============================================================
-   SCREEN 2 — DATE  (Friday is a trap that bounces back)
+   SCREEN 2 — DATE
+   Thursday / Sunday = good -> show image + caption, then advance.
+   Friday / Saturday   = no  -> show image + caption, stay put.
    ============================================================= */
 const dateReaction = document.getElementById("dateReaction");
+const dayReact = document.getElementById("dayReact");
+let badDayTimer = null;
+let advanceTimer = null;
+
+const DAYS = {
+  "Thursday 04 June": {
+    good: true,
+    img: "resources/800d8afdfa4443fda08fdf2c89e16629(3).jpg",
+    caption: "great choice",
+  },
+  "Sunday 07 June": {
+    good: true,
+    img: "resources/901ad9ad498cae6cbc137b6b57c9f012(3).jpg",
+    caption: "THE BESTEST CHOICE. look at you being decisive hahahahahah",
+  },
+  "Friday 05 June": {
+    good: false,
+    img: "resources/8cef642481853f378a453a318ef7f205(3).jpg",
+    caption: "we are working",
+  },
+  "Saturday 06 June": {
+    good: false,
+    img: "resources/f38bc75959b15a509d0d0c1a7c11dc88.jpg",
+    caption: "too busy, too many people",
+  },
+};
+
+function showDayReact(info) {
+  dateReaction.textContent = info.caption;
+  dayReact.onerror = () => { dayReact.hidden = true; };  // missing file -> just show caption
+  dayReact.src = info.img;
+  dayReact.hidden = false;
+  dayReact.classList.remove("animate__animated", "animate__zoomIn");
+  void dayReact.offsetWidth;
+  dayReact.classList.add("animate__animated", "animate__zoomIn");
+}
+
 document.querySelectorAll('[data-choice="day"]').forEach(btn => {
   btn.addEventListener("click", () => {
     const val = btn.dataset.value;
-    if (val === "Friday") {
-      dateReaction.textContent = "Friday?? the whole city's out. pick again 😤";
-      dateReaction.classList.remove("animate__animated", "animate__headShake");
-      void dateReaction.offsetWidth; // restart animation
-      dateReaction.classList.add("animate__animated", "animate__headShake");
-      return; // do NOT record, do NOT advance
+    const info = DAYS[val];
+    if (!info) return;
+
+    if (!info.good) {
+      clearTimeout(advanceTimer);  // kill any pending advance from an earlier good pick
+      state.day = null;            // don't record a bad day
+      updateNav();                 // re-lock the forward arrow
+      showDayReact(info);
+      clearTimeout(badDayTimer);
+      badDayTimer = setTimeout(() => {
+        dayReact.hidden = true;
+        dateReaction.textContent = "go on, try again 👀";
+      }, 1800);
+      return;                      // stay on the page
     }
+
+    clearTimeout(badDayTimer);
     state.day = val;
-    dateReaction.textContent = "";
-    setTimeout(() => show("time"), 450);
+    showDayReact(info);
+    updateNav();
+    clearTimeout(advanceTimer);
+    advanceTimer = setTimeout(() => show("time"), 1400);  // let her see the image first
   });
 });
 
