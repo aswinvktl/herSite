@@ -69,6 +69,30 @@ body {
   margin: 0 0 24px;
 }
 
+/* ---------- fixed back/forward nav ---------- */
+.nav-arrow {
+  position: fixed;
+  bottom: 22px;
+  width: 48px; height: 48px;
+  border-radius: 50%;
+  border: 2px solid var(--ink);
+  background: var(--paper);
+  color: var(--ink);
+  font-size: 1.6rem; line-height: 1;
+  cursor: pointer; z-index: 50;
+  box-shadow: var(--shadow);
+  transition: transform .15s ease, opacity .2s ease;
+}
+.nav-arrow:hover:not(:disabled) { transform: scale(1.12); }
+.nav-back { left: 22px; }
+.nav-fwd  { right: 22px; }
+.nav-arrow:disabled { opacity: .3; cursor: default; }
+
+@media (max-width: 600px) {
+  .nav-arrow { width: 42px; height: 42px; bottom: 16px; }
+  .nav-back { left: 14px; } .nav-fwd { right: 14px; }
+}
+
 /* ---------- screen 1: the ask ---------- */
 .home-card { transform: rotate(.4deg); }
 .joke-setup { font-size: 1.1rem; color: var(--accent-d); margin: 0; }

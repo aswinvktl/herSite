@@ -27,6 +27,9 @@ function show(name) {
       pop.classList.add("animate__animated", "animate__zoomIn");
     }
   }
+
+  // keep nav arrows in sync (defined further down)
+  if (typeof onScreenChange === "function") onScreenChange(name);
 }
 
 /* ---------- audio (start on click only, so browsers allow it) ---------- */
@@ -215,3 +218,63 @@ function renderQR() {
   qr.make();
   el.innerHTML = qr.createImgTag(5, 8); // (cellSize, margin)
 }
+
+/* =============================================================
+   BACK / FORWARD NAVIGATION
+   Fixed-corner arrows. Shown on every screen EXCEPT the first
+   (ask1) and last (summary). Forward is only allowed once the
+   current step's required choice is made.
+   ============================================================= */
+const ORDER = ["ask1","ask2","afteryes","date","time","food","addask","reasons","interested","summary"];
+const NAV_HIDDEN_ON = ["ask1","summary"];           // no arrows here
+const NAV_NO_FORWARD = ["ask2"];                    // YES button advances these, not the arrow
+
+// what each screen needs before forward is allowed (null = no gate)
+function forwardAllowed(screen) {
+  switch (screen) {
+    case "date": return !!state.day;     // must have picked a (non-Friday) day
+    case "time": return !!state.time;
+    case "food": return !!state.food;
+    default:     return true;            // note/reasons/etc. are free to pass
+  }
+}
+
+let currentScreen = "ask1";
+
+const navBack = document.getElementById("navBack");
+const navFwd  = document.getElementById("navFwd");
+
+function updateNav() {
+  const hide = NAV_HIDDEN_ON.includes(currentScreen);
+  navBack.hidden = hide;
+  navFwd.hidden  = hide;
+  if (hide) return;
+
+  const i = ORDER.indexOf(currentScreen);
+  // back is disabled at the very start of the navigable range
+  navBack.disabled = (i <= 1); // can't go back past ask2 into ask1
+  // forward disabled if this screen advances by its own button, or gate not met
+  navFwd.disabled = NAV_NO_FORWARD.includes(currentScreen) || !forwardAllowed(currentScreen);
+}
+
+navBack.addEventListener("click", () => {
+  const i = ORDER.indexOf(currentScreen);
+  if (i > 1) show(ORDER[i - 1]);
+});
+navFwd.addEventListener("click", () => {
+  const i = ORDER.indexOf(currentScreen);
+  if (i < ORDER.length - 1 && forwardAllowed(currentScreen)) {
+    const next = ORDER[i + 1];
+    if (next === "interested") play(song2);
+    if (next === "summary") buildSummary();
+    show(next);
+  }
+});
+
+function onScreenChange(name) {
+  currentScreen = name;
+  updateNav();
+}
+
+// initialise
+updateNav();
