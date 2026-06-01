@@ -10,15 +10,11 @@
 
 <div id="stage">
 
-  <!-- fixed navigation arrows -->
   <button id="navBack" class="nav-arrow nav-back" aria-label="back" hidden>‹</button>
   <button id="navFwd" class="nav-arrow nav-fwd" aria-label="forward" hidden>›</button>
 
-  <!-- ========================================================
-       SCREEN 1a — THE QUESTION SETUP
-  ========================================================= -->
   <section class="screen is-active bg-master" data-screen="ask1">
-    <div class="ask-wrap">
+    <div class="cutesy-box">
       <h1 class="joke-q">Why did the calendar feel proud?</h1>
       <div class="reveal-item" id="arrowReveal">
         <button class="arrow-next" id="startJourneyBtn" aria-label="next">→</button>
@@ -26,18 +22,12 @@
     </div>
   </section>
 
-  <!-- ========================================================
-       SCREEN 1b — PUNCHLINE & NARRATIVE SEQUENCE
-  ========================================================= -->
   <section class="screen bg-master" data-screen="ask2">
-    <div class="ask-wrap">
-      <!-- Beat 1: The Punchline -->
+    <div class="cutesy-box">
       <p class="joke-punch reveal-item" id="seqPunch">coz it has too many dates. hahahahah</p>
       
-      <!-- Beat 2: The Romantic Turn -->
       <h1 class="ask reveal-item" id="seqAsk">can I have one with u?</h1>
 
-      <!-- Beat 3: The Options Entry -->
       <div class="btn-row reveal-item" id="seqButtons">
         <button class="btn btn-yes" data-action="say-yes">YES</button>
         <button class="btn btn-no" id="noBtn">no</button>
@@ -45,27 +35,14 @@
     </div>
   </section>
 
-  <!-- Centered Cynthia Scare Popup Overlay (No borders, completely raw) -->
   <img class="cynthia-popup" id="cynthiaScare"
        src="resources/cynthia-erivo-shocked-gif-cynthia-erivo-shocked-shock.gif" 
        alt="Surprise!" />
 
-  <!-- ========================================================
-       SCREEN after YES — Fades through to Video
-  ========================================================= -->
-  <section class="screen bg-master" data-screen="afteryes">
-    <div class="day-wrap">
-      <!-- Left blank as handled by your pre-existing runYesSequence transitions -->
-    </div>
-  </section>
-
-  <!-- ========================================================
-       SCREEN 2 — DATE
-  ========================================================= -->
   <section class="screen bg-master" data-screen="date">
-    <div class="day-wrap">
+    <div class="cutesy-box">
       <img class="day-gif" id="dayGif" src="resources/time-is-up-rabbit-meme-time-is-up-rabbit-time.gif" alt="" />
-      <h2 class="day-q">so what day are WE free?</h2>
+      <h2 class="day-q" style="color: var(--ink);">so what day are WE free?</h2>
       <div class="options">
         <button class="opt" data-choice="day" data-value="Thursday 04 June">Thursday 04</button>
         <button class="opt" data-choice="day" data-value="Friday 05 June">Friday 05</button>
@@ -76,8 +53,6 @@
       <img class="day-react" id="dayReact" alt="" hidden />
     </div>
   </section>
-
-  <!-- Remaining screens retain their default internal target bindings -->
 
 </div>
 

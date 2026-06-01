@@ -1,5 +1,5 @@
 /* =============================================================
-   date-site — Updated Playful Styles
+   date-site — Updated Cutesy / Playful Theme
    ============================================================= */
 @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;1,9..144,500&family=Nunito:wght@400;700&display=swap');
 
@@ -10,8 +10,8 @@
   --accent: #ff5d8f;
   --accent-d: #e23e73;
   --yes: #ff5d8f;
-  --paper: #fffdfa;
-  --shadow: 0 10px 30px rgba(226, 62, 115, 0.18);
+  --paper: rgba(255, 253, 250, 0.82); /* Semi-transparent base wrapper */
+  --shadow: 0 12px 40px rgba(226, 62, 115, 0.15);
   --display: 'Fraunces', Georgia, serif;
   --body: 'Nunito', system-ui, sans-serif;
 }
@@ -29,21 +29,7 @@ body {
 
 #stage { position: relative; min-height: 100vh; }
 
-/* ---------- screen fade ---------- */
-.screen {
-  position: absolute; inset: 0;
-  display: none;
-  align-items: center; justify-content: center;
-  padding: 32px;
-  opacity: 0;
-  transition: opacity .45s ease;
-}
-.screen.is-active {
-  display: flex;
-  opacity: 1;
-}
-
-/* New Master Background (Applied everywhere except summary) */
+/* Master Layout Background (Universal asset reference) */
 .bg-master {
   background-image: url('../resources/•••.jpeg');
   background-size: cover;
@@ -52,20 +38,41 @@ body {
 .bg-master::before {
   content: "";
   position: absolute; inset: 0;
-  background: linear-gradient(180deg, rgba(0,0,0,.2), rgba(0,0,0,.5));
+  background: linear-gradient(180deg, rgba(0,0,0,0.15), rgba(0,0,0,0.4));
   z-index: 0;
 }
 
-/* ---------- card ---------- */
-.card {
+/* ---------- screen fade ---------- */
+.screen {
+  position: absolute; inset: 0;
+  display: none;
+  align-items: center; justify-content: center;
+  padding: 24px;
+  opacity: 0;
+  transition: opacity .45s ease;
+}
+.screen.is-active {
+  display: flex;
+  opacity: 1;
+}
+
+/* ---------- The Cutesy Semi-Transparent Box Container ---------- */
+.cutesy-box {
   background: var(--paper);
-  border: 2px solid var(--ink);
-  border-radius: 22px;
+  backdrop-filter: blur(12px); /* Frosty backdrop filter blur effect */
+  -webkit-backdrop-filter: blur(12px);
+  
+  /* Playful, irregular handmade sketchy border line */
+  border: 3px solid var(--ink);
+  border-radius: 255px 15px 225px 15px/15px 225px 15px 255px; 
+  
   box-shadow: var(--shadow);
-  padding: 40px 44px;
-  max-width: 560px;
+  padding: 50px 40px;
+  max-width: 620px;
   width: 100%;
   text-align: center;
+  position: relative;
+  z-index: 2;
 }
 
 /* ---------- Sequence entry animations ---------- */
@@ -79,48 +86,48 @@ body {
   transform: translateY(0);
 }
 
-.ask-wrap {
-  position: relative; z-index: 2;
-  max-width: 760px; text-align: center;
-  color: #fff;
-  text-shadow: 0 2px 18px rgba(0,0,0,.65);
-  padding: 24px;
-}
 .joke-q {
   font-family: var(--display);
-  font-size: clamp(2rem, 5vw, 3.4rem);
-  line-height: 1.1; margin: 0 0 20px;
-}
-.joke-punch {
-  font-family: var(--body);
-  font-size: clamp(1.3rem, 3vw, 1.8rem);
-  font-style: italic;
-  margin: 0 0 30px;
-}
-.ask {
-  font-family: var(--display);
-  font-size: clamp(2.4rem, 6vw, 4rem);
-  margin: 0 0 40px;
+  font-size: clamp(1.8rem, 4.5vw, 2.8rem);
+  line-height: 1.2; 
+  margin: 0;
+  color: var(--ink);
+  text-shadow: none; /* Removed heavy text shadow so text is crisp inside the glass box */
 }
 
-/* ---------- Fixed Buttons & Safe Row Layout ---------- */
+.joke-punch {
+  font-family: var(--body);
+  font-size: clamp(1.2rem, 3vw, 1.5rem);
+  font-style: italic;
+  font-weight: 700;
+  color: var(--accent-d);
+  margin: 0 0 24px;
+}
+
+.ask {
+  font-family: var(--display);
+  font-size: clamp(2rem, 5.5vw, 3.2rem);
+  color: var(--ink);
+  margin: 0 0 32px;
+}
+
+/* ---------- Buttons & Action Alignment ---------- */
 .btn-row {
   display: flex; 
   align-items: center; 
   justify-content: center;
-  gap: 80px; /* Generous spacing so they never naturally cross over */
+  gap: 60px; 
   position: relative; 
-  min-height: 120px;
+  min-height: 100px;
   width: 100%;
-  max-width: 500px;
-  margin: 0 auto;
 }
 
 .btn {
   font-family: var(--body);
   font-weight: 700;
-  border: 2px solid var(--ink);
-  border-radius: 999px;
+  border: 3px solid var(--ink);
+  /* Matching playful organic sketchy button bounds */
+  border-radius: 255px 25px 225px 25px/25px 225px 25px 255px;
   cursor: pointer;
   transition: transform .15s ease, box-shadow .15s ease;
 }
@@ -129,60 +136,53 @@ body {
 .btn-yes {
   background: var(--yes);
   color: white;
-  font-size: 2.4rem;
-  padding: 16px 54px;
-  z-index: 10; /* Always sits on top layer */
+  font-size: 2.2rem;
+  padding: 12px 48px;
+  z-index: 10;
 }
-.btn-yes:hover { transform: scale(1.05); }
+.btn-yes:hover { transform: scale(1.05) rotate(-1deg); }
 
 .btn-no {
-  background: var(--paper);
+  background: #fffdfa;
   color: var(--ink);
-  font-size: 1.2rem;
-  padding: 12px 28px;
+  font-size: 1.1rem;
+  padding: 10px 24px;
   position: relative;
   transition: transform 0.1s ease;
   z-index: 9;
 }
 
-/* ---------- Arrow Next Elements ---------- */
 .arrow-next {
-  margin-top: 20px;
-  width: 64px; height: 64px;
+  margin-top: 24px;
+  width: 60px; height: 60px;
+  border: 3px solid var(--ink);
   border-radius: 50%;
-  border: 2px solid #fff;
-  background: rgba(255,255,255,.15);
-  color: #fff; font-size: 1.8rem; cursor: pointer;
-  backdrop-filter: blur(4px);
+  background: var(--bg2);
+  color: var(--ink); 
+  font-size: 1.8rem; 
+  cursor: pointer;
   transition: transform .15s ease, background .2s ease;
 }
-.arrow-next:hover { transform: scale(1.1); background: rgba(255,255,255,.3); }
+.arrow-next:hover { transform: scale(1.1) rotate(10deg); background: var(--accent); color: white; }
 
 /* ---------- Center Screen Cynthia Scare Pop-up ---------- */
 .cynthia-popup {
   position: fixed;
   top: 50%; left: 50%;
   transform: translate(-50%, -50%) scale(0.5);
-  width: 320px; max-width: 75vw;
+  width: 300px; max-width: 70vw;
   z-index: 100;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transition: opacity 0.2s ease, transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 .cynthia-popup.active {
   opacity: 1;
   transform: translate(-50%, -50%) scale(1);
 }
 
-/* Rest of your base site options styles stay intact */
+/* Base Form/Input updates to harmonize with the transparency look */
 .options { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin-bottom: 14px; }
-.opt { font-family: var(--body); font-weight: 700; background: var(--bg2); border: 2px solid var(--ink); border-radius: 14px; padding: 14px 22px; font-size: 1.05rem; cursor: pointer; transition: transform .12s ease, background .2s ease; }
-.opt:hover { transform: translateY(-2px) rotate(-1deg); background: var(--accent); color: white; }
-.reaction { font-family: var(--display); font-style: italic; font-size: 1.15rem; min-height: 1.4em; margin: 12px 0 0; color: #fff; }
-.day-wrap { position: relative; z-index: 2; text-align: center; color: #fff; text-shadow: 0 2px 16px rgba(0,0,0,.6); max-width: 720px; padding: 24px; }
-.day-gif { width: 200px; max-width: 50vw; border-radius: 14px; margin-bottom: 18px; box-shadow: 0 10px 36px rgba(0,0,0,.5); }
-.day-q { font-family: var(--display); font-size: clamp(1.8rem, 4.5vw, 2.8rem); margin: 0 0 26px; }
-.day-react { display: block; margin: 18px auto 0; width: 280px; max-width: 70vw; border-radius: 14px; box-shadow: 0 12px 40px rgba(0,0,0,.55); }
-.nav-arrow { position: fixed; bottom: 22px; width: 48px; height: 48px; border-radius: 50%; border: 2px solid var(--ink); background: var(--paper); color: var(--ink); font-size: 1.6rem; line-height: 1; cursor: pointer; z-index: 50; box-shadow: var(--shadow); transition: transform .15s ease, opacity .2s ease; }
-.nav-back { left: 22px; } .nav-fwd { right: 22px; }
-.nav-arrow:disabled { opacity: .3; cursor: default; }
+.opt { font-family: var(--body); font-weight: 700; background: var(--bg2); border: 2px solid var(--ink); border-radius: 12px; padding: 12px 20px; font-size: 1rem; cursor: pointer; transition: transform .12s ease, background .2s ease; }
+.opt:hover { transform: translateY(-2px); background: var(--accent); color: white; }
+.reaction { font-family: var(--display); font-style: italic; font-size: 1.15rem; min-height: 1.4em; margin: 12px 0 0; color: var(--ink); }
