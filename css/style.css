@@ -6,7 +6,6 @@
    if you want FULLY offline (Brave-proof fonts too), download the
    .woff2 files into /lib and use @font-face instead.
    ============================================================= */
-@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;1,9..144,500&family=Nunito:wght@400;700&display=swap');
 
 :root {
   --bg: #fff0f3;
@@ -353,6 +352,12 @@ body {
   border: none; background: rgba(255,255,255,.85);
   font-size: 1.6rem; line-height: 1; cursor: pointer;
   box-shadow: 0 2px 8px rgba(0,0,0,.2);
+}
+.ig-track {
+  display: flex;
+  height: 100%;
+  width: 100%;
+  transition: transform 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 .ig-prev { left: 10px; } .ig-next { right: 10px; }
 .ig-dots { display: flex; gap: 6px; justify-content: center; padding: 12px; }

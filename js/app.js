@@ -6,9 +6,13 @@
 /* ---------- tiny state object ---------- */
 const state = { day: null, time: null, food: null, note: "" };
 
+let currentScreen = "ask1";
+
 /* ---------- screen switching (fade) ---------- */
 const screens = document.querySelectorAll(".screen");
 function show(name) {
+  currentScreen = name; // Fix: Explicitly update global state immediately
+
   screens.forEach(s => {
     if (s.dataset.screen === name) {
       s.classList.add("is-active");
@@ -20,11 +24,11 @@ function show(name) {
 
   // when the ask screen loads, pop the image in
   if (name === "ask2") {
-    const pop = document.getElementById("askPop");
-    if (pop) {
-      pop.classList.remove("animate__animated", "animate__zoomIn");
-      void pop.offsetWidth;
-      pop.classList.add("animate__animated", "animate__zoomIn");
+    const popImg = document.getElementById("askPop");
+    if (popImg) {
+      popImg.classList.remove("animate__animated", "animate__zoomIn");
+      void popImg.offsetWidth;
+      popImg.classList.add("animate__animated", "animate__zoomIn");
     }
   }
 
@@ -34,8 +38,8 @@ function show(name) {
   // reset the timeout/water-break screen so it replays
   if (name === "timeout" && typeof resetTimeout === "function") resetTimeout();
 
-  // keep nav arrows in sync (defined further down)
-  if (typeof onScreenChange === "function") onScreenChange(name);
+  // keep nav arrows in sync
+  updateNav();
 }
 
 
@@ -62,6 +66,16 @@ noBtn.addEventListener("mouseover", () => {
   noBtn.style.transform = `translate(${dx}px, ${dy}px)`;
 });
 
+// For mobile layout support where mouseover doesn't exist
+noBtn.addEventListener("click", (e) => {
+  e.preventDefault();
+  noMeme.hidden = false;
+  noMeme.classList.add("animate__animated", "animate__zoomIn");
+  const dx = (Math.random() * 200 - 100).toFixed(0);
+  const dy = (Math.random() * 120 - 60).toFixed(0);
+  noBtn.style.transform = `translate(${dx}px, ${dy}px)`;
+});
+
 // YES → confetti + go to the post-yes screen
 document.querySelector('[data-action="say-yes"]').addEventListener("click", () => {
   pop();
@@ -70,7 +84,6 @@ document.querySelector('[data-action="say-yes"]').addEventListener("click", () =
 
 /* =============================================================
    POST-YES SEQUENCE: img1 fades in/out -> img2 fades in/out -> video
-   Tweak the hold times (ms) below.
    ============================================================= */
 const YES_HOLD = 2200;   // how long each image stays fully visible
 const YES_FADE = 900;    // must match the CSS transition (0.9s)
@@ -82,33 +95,42 @@ function runYesSequence() {
   const img2 = document.getElementById("yesImg2");
   const vid  = document.getElementById("yesVideo");
 
-  // reset (so it replays cleanly if she navigates back then forward)
+  // reset
   [img1, img2, vid].forEach(el => el.classList.remove("show"));
   vid.pause(); vid.currentTime = 0;
   yesSeqRan = true;
   videoDone = false;
-  updateNav();   // lock the forward arrow while the sequence plays
+  updateNav();   // lock the forward arrow while sequence plays
 
   // img1 in
-  setTimeout(() => img1.classList.add("show"), 50);
+  setTimeout(() => { if(currentScreen === "afteryes") img1.classList.add("show"); }, 50);
+  
   // img1 out, img2 in
-  setTimeout(() => img1.classList.remove("show"), 50 + YES_HOLD);
-  setTimeout(() => img2.classList.add("show"), 50 + YES_HOLD + YES_FADE);
+  setTimeout(() => { if(currentScreen === "afteryes") img1.remove.classList ? img1.classList.remove("show") : null; }, 50 + YES_HOLD);
+  setTimeout(() => { if(currentScreen === "afteryes") img2.classList.add("show"); }, 50 + YES_HOLD + YES_FADE);
+  
   // img2 out
-  setTimeout(() => img2.classList.remove("show"), 50 + YES_HOLD + YES_FADE + YES_HOLD);
+  setTimeout(() => { if(currentScreen === "afteryes") img2.classList.remove("show"); }, 50 + YES_HOLD + YES_FADE + YES_HOLD);
+  
   // video in + play
   const vidStart = 50 + YES_HOLD + YES_FADE + YES_HOLD + YES_FADE;
   setTimeout(() => {
+    if (currentScreen !== "afteryes") return;
     vid.classList.add("show");
-    vid.play().catch(() => {/* if blocked, the forward arrow still works */});
+    vid.play().catch(() => {
+      videoDone = true;
+      updateNav();
+    });
   }, vidStart);
 
-  // when the video finishes, unlock the forward arrow (goes to date)
+  // when video finishes, unlock arrow and snap automatically to date pick!
   vid.onended = () => {
     videoDone = true;
-    if (currentScreen === "afteryes") updateNav();
+    if (currentScreen === "afteryes") {
+      updateNav();
+      show("date");
+    }
   };
-  // safety: if the video can't load/play, don't trap her — unlock anyway
   vid.onerror = () => {
     videoDone = true;
     if (currentScreen === "afteryes") updateNav();
@@ -117,8 +139,6 @@ function runYesSequence() {
 
 /* =============================================================
    SCREEN 2 — DATE
-   Thursday / Sunday = good -> show image + caption, then advance.
-   Friday / Saturday   = no  -> show image + caption, stay put.
    ============================================================= */
 const dateReaction = document.getElementById("dateReaction");
 const dayReact = document.getElementById("dayReact");
@@ -150,7 +170,7 @@ const DAYS = {
 
 function showDayReact(info) {
   dateReaction.textContent = info.caption;
-  dayReact.onerror = () => { dayReact.hidden = true; };  // missing file -> just show caption
+  dayReact.onerror = () => { dayReact.hidden = true; }; 
   dayReact.src = info.img;
   dayReact.hidden = false;
   dayReact.classList.remove("animate__animated", "animate__zoomIn");
@@ -165,16 +185,16 @@ document.querySelectorAll('[data-choice="day"]').forEach(btn => {
     if (!info) return;
 
     if (!info.good) {
-      clearTimeout(advanceTimer);  // kill any pending advance from an earlier good pick
-      state.day = null;            // don't record a bad day
-      updateNav();                 // re-lock the forward arrow
+      clearTimeout(advanceTimer);  
+      state.day = null;            
+      updateNav();                 
       showDayReact(info);
       clearTimeout(badDayTimer);
       badDayTimer = setTimeout(() => {
         dayReact.hidden = true;
         dateReaction.textContent = "go on, try again 👀";
       }, 1800);
-      return;                      // stay on the page
+      return;                      
     }
 
     clearTimeout(badDayTimer);
@@ -182,12 +202,12 @@ document.querySelectorAll('[data-choice="day"]').forEach(btn => {
     showDayReact(info);
     updateNav();
     clearTimeout(advanceTimer);
-    advanceTimer = setTimeout(() => show("time"), 1400);  // let her see the image first
+    advanceTimer = setTimeout(() => show("time"), 1400);  
   });
 });
 
 /* =============================================================
-   SCREEN 3 — TIME  (all picks: same reaction + reveal next)
+   SCREEN 3 — TIME 
    ============================================================= */
 const timeReaction = document.getElementById("timeReaction");
 const timeReact = document.getElementById("timeReact");
@@ -208,7 +228,6 @@ document.querySelectorAll('[data-choice="time"]').forEach(btn => {
 
 /* =============================================================
    SCREEN 3b — TIMEOUT / WATER BREAK
-   stage1 (tap to continue) -> stage2 (10s countdown, skippable) -> food
    ============================================================= */
 const timeoutStage1 = document.getElementById("timeoutStage1");
 const timeoutStage2 = document.getElementById("timeoutStage2");
@@ -216,7 +235,6 @@ const waterCount = document.getElementById("waterCount");
 const waterSkip = document.getElementById("waterSkip");
 let waterTimer = null;
 
-// tap anywhere on stage 1 to go to the water break
 timeoutStage1.addEventListener("click", () => {
   timeoutStage1.hidden = true;
   timeoutStage2.hidden = false;
@@ -242,7 +260,6 @@ waterSkip.addEventListener("click", () => {
   show("food");
 });
 
-// reset the timeout screen each time it's shown (so back-nav replays it)
 function resetTimeout() {
   clearInterval(waterTimer);
   timeoutStage1.hidden = false;
@@ -251,7 +268,7 @@ function resetTimeout() {
 }
 
 /* =============================================================
-   SCREEN 4 — FOOD  (every pick: same "banging choice" reaction)
+   SCREEN 4 — FOOD 
    ============================================================= */
 const foodOther = document.getElementById("foodOther");
 const foodReaction = document.getElementById("foodReaction");
@@ -287,7 +304,6 @@ document.querySelectorAll('[data-choice="food"]').forEach(btn => {
   });
 });
 
-// typing in "other" sets the food + shows the same reaction once there's text
 foodOther.addEventListener("input", () => {
   const v = foodOther.value.trim();
   state.food = v || null;
@@ -308,7 +324,7 @@ const noteBox = document.getElementById("noteBox");
 noteBox.addEventListener("input", () => { state.note = noteBox.value.trim(); });
 
 /* =============================================================
-   SCREEN 6 — IG carousel (5 slides, wraps)
+   SCREEN 6 — IG carousel 
    ============================================================= */
 const igTrack = document.getElementById("igTrack");
 const igSlides = igTrack ? [...igTrack.children] : [];
@@ -320,6 +336,7 @@ function igRender() {
   [...igDots.children].forEach((d, i) => d.classList.toggle("on", i === igIndex));
 }
 if (igTrack) {
+  igDots.innerHTML = ""; // Clear placeholders
   igSlides.forEach((_, i) => {
     const d = document.createElement("span");
     d.className = "ig-dotmark" + (i === 0 ? " on" : "");
@@ -336,7 +353,7 @@ if (igTrack) {
 }
 
 /* =============================================================
-   generic "goto" buttons + per-screen hooks
+   generic "goto" buttons
    ============================================================= */
 document.querySelectorAll('[data-action="goto"]').forEach(btn => {
   btn.addEventListener("click", () => {
@@ -356,49 +373,45 @@ function buildSummary() {
   if (state.note) {
     document.getElementById("sumNoteRow").hidden = false;
     document.getElementById("sumNote").textContent = state.note;
+  } else {
+    document.getElementById("sumNoteRow").hidden = true;
   }
   pop();
   renderQR();
 }
 
-/* QR generated locally (no external image call).
-   REPLACE the number below with your WhatsApp number in international
-   format, no + and no spaces, e.g. 447700900123 for a UK mobile.
-   You can also pre-fill a message after ?text= */
-const WHATSAPP_URL = "https://wa.me/REPLACE_WHATSAPP_NUMBER?text=here's%20our%20plan";
+// Pre-filled WhatsApp response integration
+const WHATSAPP_URL = "https://wa.me/REPLACE_WHATSAPP_NUMBER?text=Hey!%20Here%20is%20our%20date%20plan!%20💖";
 
 function renderQR() {
   const el = document.getElementById("qr");
   el.innerHTML = "";
-  // qrcode-generator API
-  const qr = qrcode(0, "M");
-  qr.addData(WHATSAPP_URL);
-  qr.make();
-  el.innerHTML = qr.createImgTag(5, 8); // (cellSize, margin)
+  try {
+    const qr = qrcode(0, "M");
+    qr.addData(WHATSAPP_URL);
+    qr.make();
+    el.innerHTML = qr.createImgTag(5, 8);
+  } catch (err) {
+    el.textContent = "Error generating QR Code";
+  }
 }
 
 /* =============================================================
    BACK / FORWARD NAVIGATION
-   Fixed-corner arrows. Shown on every screen EXCEPT the first
-   (ask1) and last (summary). Forward is only allowed once the
-   current step's required choice is made.
    ============================================================= */
 const ORDER = ["ask1","ask2","afteryes","date","time","timeout","food","addask","reasons","summary"];
-const NAV_HIDDEN_ON = ["ask1","summary"];           // no arrows here
-const NAV_NO_FORWARD = ["ask2","timeout"];          // these advance by their own controls
+const NAV_HIDDEN_ON = ["ask1","summary"];           
+const NAV_NO_FORWARD = ["ask2","timeout"];          
 
-// what each screen needs before forward is allowed (null = no gate)
 function forwardAllowed(screen) {
   switch (screen) {
-    case "afteryes": return videoDone;   // only after the video finishes
-    case "date": return !!state.day;     // must have picked a (non-Friday) day
+    case "afteryes": return videoDone;   
+    case "date": return !!state.day;     
     case "time": return !!state.time;
     case "food": return !!state.food;
-    default:     return true;            // note/reasons/etc. are free to pass
+    default:     return true;            
   }
 }
-
-let currentScreen = "ask1";
 
 const navBack = document.getElementById("navBack");
 const navFwd  = document.getElementById("navFwd");
@@ -410,9 +423,7 @@ function updateNav() {
   if (hide) return;
 
   const i = ORDER.indexOf(currentScreen);
-  // back is disabled at the very start of the navigable range
-  navBack.disabled = (i <= 1); // can't go back past ask2 into ask1
-  // forward disabled if this screen advances by its own button, or gate not met
+  navBack.disabled = (i <= 1); 
   navFwd.disabled = NAV_NO_FORWARD.includes(currentScreen) || !forwardAllowed(currentScreen);
 }
 
@@ -429,10 +440,5 @@ navFwd.addEventListener("click", () => {
   }
 });
 
-function onScreenChange(name) {
-  currentScreen = name;
-  updateNav();
-}
-
-// initialise
-updateNav();
+// Initialize on load explicitly
+show("ask1");
