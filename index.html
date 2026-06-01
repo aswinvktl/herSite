@@ -10,13 +10,9 @@
 
 <div id="stage">
 
-  <!-- Fixed center edge navigation arrows -->
   <button id="navBack" class="nav-arrow nav-back" aria-label="back" hidden>‹</button>
   <button id="navFwd" class="nav-arrow nav-fwd" aria-label="forward" hidden>›</button>
 
-  <!-- ========================================================
-       SCREEN 1a — THE QUESTION SETUP
-  ========================================================= -->
   <section class="screen is-active bg-master" data-screen="ask1">
     <div class="cutesy-box">
       <h1 class="joke-q">Why did the calendar feel proud?</h1>
@@ -26,9 +22,6 @@
     </div>
   </section>
 
-  <!-- ========================================================
-       SCREEN 1b — PUNCHLINE & NARRATIVE SEQUENCE
-  ========================================================= -->
   <section class="screen bg-master" data-screen="ask2">
     <div class="cutesy-box">
       <p class="joke-punch reveal-item" id="seqPunch">coz it has too many dates. hahahahah</p>
@@ -41,14 +34,22 @@
     </div>
   </section>
 
-  <!-- Centered Cynthia Scare Popup Layer (No borders, purely reactive) -->
   <img class="cynthia-popup" id="cynthiaScare"
        src="resources/cynthia-erivo-shocked-gif-cynthia-erivo-shocked-shock.gif" 
        alt="Surprise!" />
 
-  <!-- ========================================================
-       SCREEN 2 — DATE PICKER
-  ========================================================= -->
+  <section class="screen bg-master" data-screen="afteryes">
+    <div class="cutesy-box">
+      <div class="yes-stage">
+        <img class="yes-media" id="yesImg1" src="resources/3cf9360ae0d5b10c7445bf571fbc7d7b(3).jpg" alt="Us" />
+        <img class="yes-media" id="yesImg2" src="resources/24a49c029b0f5fef2cb0c9b3cf33178a(3).jpg" alt="Us again" />
+        <video class="yes-media" id="yesVideo" playsinline preload="auto" muted>
+          <source src="resources/Video-310.mp4" type="video/mp4" />
+        </video>
+      </div>
+    </div>
+  </section>
+
   <section class="screen bg-master" data-screen="date">
     <div class="cutesy-box">
       <img class="day-gif" id="dayGif" src="resources/time-is-up-rabbit-meme-time-is-up-rabbit-time.gif" alt="" />

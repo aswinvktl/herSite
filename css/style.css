@@ -1,5 +1,5 @@
 /* =============================================================
-   date-site — Updated Global Theme Styles
+   date-site — Complete Custom Playful Stylesheet
    ============================================================= */
 @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;1,9..144,500&family=Nunito:wght@400;700&display=swap');
 
@@ -29,7 +29,7 @@ body {
 
 #stage { position: relative; min-height: 100vh; }
 
-/* Master Layout Background (Universal theme asset reference) */
+/* Master Background Image Configuration */
 .bg-master {
   background-image: url('../resources/•••.jpeg');
   background-size: cover;
@@ -42,7 +42,7 @@ body {
   z-index: 0;
 }
 
-/* ---------- screen fade ---------- */
+/* ---------- Screen Layout States ---------- */
 .screen {
   position: absolute; inset: 0;
   display: none;
@@ -56,7 +56,7 @@ body {
   opacity: 1;
 }
 
-/* ---------- The Semi-Transparent Squiggly Sketchpad Box ---------- */
+/* ---------- Semi-Transparent Squiggly Sketchpad Box ---------- */
 .cutesy-box {
   background: var(--paper);
   backdrop-filter: blur(14px);
@@ -76,7 +76,7 @@ body {
   border-radius: 225px 30px 255px 20px / 25px 255px 30px 225px;
 }
 
-/* ---------- Center Edge Navigation Alignment ---------- */
+/* ---------- Center Edge Floating Navigation ---------- */
 .nav-arrow {
   position: fixed;
   top: 50%;
@@ -108,7 +108,7 @@ body {
   .nav-back { left: 10px; } .nav-fwd { right: 10px; }
 }
 
-/* ---------- Sequence entry animations ---------- */
+/* ---------- Sequence Step Transitions ---------- */
 .reveal-item {
   opacity: 0;
   transform: translateY(15px);
@@ -123,7 +123,7 @@ body {
 .joke-punch { font-family: var(--body); font-size: clamp(1.2rem, 3vw, 1.5rem); font-style: italic; font-weight: 700; color: var(--accent-d); margin: 0 0 24px; }
 .ask { font-family: var(--display); font-size: clamp(2rem, 5.5vw, 3.2rem); color: var(--ink); margin: 0 0 32px; }
 
-/* ---------- Buttons Layout ---------- */
+/* ---------- Interactive Element Arrays ---------- */
 .btn-row { display: flex; align-items: center; justify-content: center; gap: 60px; position: relative; min-height: 100px; width: 100%; }
 .btn { font-family: var(--body); font-weight: 700; border: 3px solid var(--ink); border-radius: 120px 15px 100px 20px / 25px 95px 15px 110px; cursor: pointer; transition: transform .15s ease, box-shadow .15s ease, border-radius .15s ease; }
 
@@ -143,7 +143,32 @@ body {
 }
 .arrow-next:hover { transform: scale(1.1) rotate(15deg); background: var(--accent); color: white; box-shadow: 1px 1px 0px var(--ink); }
 
-/* ---------- Cynthia Screen Pop-up Overlay ---------- */
+/* ---------- YES Page Image/Video Square Stage ---------- */
+.yes-stage {
+  position: relative;
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+  aspect-ratio: 1 / 1; 
+  overflow: hidden;
+  border: 3px solid var(--ink);
+  border-radius: 40px 30px 45px 35px / 35px 40px 30px 45px;
+  box-shadow: 4px 4px 0px var(--ink);
+  background: #000;
+}
+.yes-media {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover; 
+  opacity: 0;
+  transition: opacity 0.8s ease-in-out;
+  pointer-events: none;
+}
+.yes-media.show { opacity: 1; }
+
+/* ---------- Center Screen Borderless Cynthia Scare Popup ---------- */
 .cynthia-popup {
   position: fixed;
   top: 50%; left: 50%;
@@ -159,7 +184,7 @@ body {
   transform: translate(-50%, -50%) scale(1);
 }
 
-/* ---------- Interactive Option Chips ---------- */
+/* ---------- Option Selections Configuration ---------- */
 .options { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin-bottom: 14px; }
 .opt { font-family: var(--body); font-weight: 700; background: var(--bg2); border: 2px solid var(--ink); border-radius: 80px 15px 75px 12px / 14px 70px 12px 85px; padding: 12px 20px; font-size: 1rem; cursor: pointer; box-shadow: 2px 2px 0px var(--ink); transition: transform .12s ease, background .2s ease, border-radius .12s ease; }
 .opt:hover { transform: translateY(-2px) rotate(1deg); background: var(--accent); color: white; border-radius: 75px 12px 80px 15px / 12px 85px 14px 70px; }

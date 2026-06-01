@@ -1,12 +1,12 @@
 /* =============================================================
-   date-site — engine
+   date-site — Integrated Transition & Navigation Engine
    ============================================================= */
 
 const state = { day: null, time: null, food: null, note: "" };
 let currentScreen = "ask1";
 let videoDone = false;
 
-/* ---------- screen switching ---------- */
+/* ---------- Core Screen Switching Matrix ---------- */
 const screens = document.querySelectorAll(".screen");
 function show(name) {
   currentScreen = name;
@@ -27,7 +27,7 @@ function show(name) {
   updateNav();
 }
 
-/* ---------- Screen 1a Timing ---------- */
+/* ---------- Screen 1a Arrow Entry Delay ---------- */
 function runScreen1aSequence() {
   const arrow = document.getElementById("arrowReveal");
   arrow.classList.remove("show");
@@ -36,7 +36,7 @@ function runScreen1aSequence() {
   }, 1200);
 }
 
-/* ---------- Screen 1b Timed Sequence ---------- */
+/* ---------- Screen 1b Timed Narrative Sequence ---------- */
 function runScreen1bSequence() {
   const punch = document.getElementById("seqPunch");
   const askText = document.getElementById("seqAsk");
@@ -49,27 +49,26 @@ function runScreen1bSequence() {
   setTimeout(() => { if (currentScreen === "ask2") buttons.classList.add("show"); }, 3800);
 }
 
-/* ---------- No Button Running Away + Pure Hover Cynthia Toggle ---------- */
+/* ---------- No Button Run Away Logic + Cynthia Popup Hover Sync ---------- */
 const noBtn = document.getElementById("noBtn");
 const cynthiaScare = document.getElementById("cynthiaScare");
 
 function moveNoButton() {
-  // Move the button securely away from the YES button grid path
+  // Move vectors stay isolated on the outer edge plane away from the YES route
   const moveX = (Math.random() * 120 + 60).toFixed(0); 
   const moveY = (Math.random() * 100 - 50).toFixed(0);
   noBtn.style.transform = `translate(${moveX}px, ${moveY}px)`;
 }
 
 noBtn.addEventListener("mouseenter", () => {
-  cynthiaScare.classList.add("active"); // Show gif instantly on hover start
+  cynthiaScare.classList.add("active");
   moveNoButton();
 });
 
 noBtn.addEventListener("mouseleave", () => {
-  cynthiaScare.classList.remove("active"); // Hide gif completely when cursor rolls off
+  cynthiaScare.classList.remove("active");
 });
 
-// Touch fallback for mobile
 noBtn.addEventListener("touchstart", (e) => {
   e.preventDefault();
   cynthiaScare.classList.add("active");
@@ -77,7 +76,64 @@ noBtn.addEventListener("touchstart", (e) => {
   setTimeout(() => { cynthiaScare.classList.remove("active"); }, 1000);
 });
 
-/* ---------- Yes Transition Trigger ---------- */
+/* ---------- YES Flow Crossfade Sequence Tracker ---------- */
+const YES_HOLD = 2200;   
+const YES_FADE = 800;    
+
+function runYesSequence() {
+  const img1 = document.getElementById("yesImg1");
+  const img2 = document.getElementById("yesImg2");
+  const vid  = document.getElementById("yesVideo");
+
+  [img1, img2, vid].forEach(el => el.classList.remove("show"));
+  vid.pause(); 
+  vid.currentTime = 0;
+  
+  videoDone = false;
+  updateNav(); 
+
+  setTimeout(() => { 
+    if (currentScreen === "afteryes") img1.classList.add("show"); 
+  }, 50);
+  
+  setTimeout(() => { 
+    if (currentScreen === "afteryes") img1.classList.remove("show"); 
+  }, 50 + YES_HOLD);
+  
+  setTimeout(() => { 
+    if (currentScreen === "afteryes") img2.classList.add("show"); 
+  }, 50 + YES_HOLD + YES_FADE);
+  
+  setTimeout(() => { 
+    if (currentScreen === "afteryes") img2.classList.remove("show"); 
+  }, 50 + YES_HOLD + YES_FADE + YES_HOLD);
+  
+  const vidStart = 50 + YES_HOLD + YES_FADE + YES_HOLD + YES_FADE;
+  setTimeout(() => {
+    if (currentScreen !== "afteryes") return;
+    vid.classList.add("show");
+    
+    vid.play().catch(() => {
+      videoDone = true;
+      updateNav();
+    });
+  }, vidStart);
+
+  vid.onended = () => {
+    videoDone = true;
+    if (currentScreen === "afteryes") {
+      updateNav();
+      show("date"); 
+    }
+  };
+
+  vid.onerror = () => {
+    videoDone = true;
+    if (currentScreen === "afteryes") updateNav();
+  };
+}
+
+/* ---------- Static Interaction Bindings ---------- */
 document.querySelector('[data-action="say-yes"]').addEventListener("click", () => {
   show("afteryes");
 });
@@ -87,10 +143,10 @@ document.getElementById("startJourneyBtn").addEventListener("click", () => {
 });
 
 /* =============================================================
-   CENTER EDGE NAVIGATION CONTROLLER
+   CENTER EDGE SYSTEM NAVIGATION Matrix
    ============================================================= */
-const ORDER = ["ask1","ask2","afteryes","date","time","timeout","food","addask","reasons","summary"];
-const NAV_HIDDEN_ON = ["ask1","summary","ask2"]; // Arrows stay hidden during initial jokes
+const ORDER = ["ask1","ask2","afteryes","date"];
+const NAV_HIDDEN_ON = ["ask1","ask2"]; 
 const navBack = document.getElementById("navBack");
 const navFwd  = document.getElementById("navFwd");
 
@@ -98,8 +154,6 @@ function forwardAllowed(screen) {
   switch (screen) {
     case "afteryes": return videoDone;   
     case "date": return !!state.day;     
-    case "time": return !!state.time;
-    case "food": return !!state.food;
     default:     return true;            
   }
 }
