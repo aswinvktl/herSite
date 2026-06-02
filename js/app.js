@@ -376,8 +376,6 @@ document.getElementById("waterSkip").addEventListener("click", () => {
 
 
 // peppa only shows AFTER she clicks.
-// fix this later
-// ugggghhhh peppa comes after state is true
 const foodOther = document.getElementById("foodOther");
 const foodReaction = document.getElementById("foodReaction");
 const foodReact = document.getElementById("foodReact");
@@ -571,12 +569,10 @@ document.getElementById("memedumpSkip").addEventListener("click", () => { show("
 
 // arrow
 const ORDER = ["landing","instructions","ready","ask1","ask2","afteryes","date","time","timeout","food","addask","summary","memedump","sleep"];
-// hide the arrows on all the intro/outro screens + ones with their own button
 const NAV_HIDDEN_ON = ["landing","instructions","ready","ask1","ask2","timeout","summary","memedump","sleep"];
 const navBack = document.getElementById("navBack");
 const navFwd  = document.getElementById("navFwd");
 
-// cant go forward till the current screen is actually answered
 function forwardAllowed(screen) {
   switch (screen) {
     case "afteryes": return videoDone;

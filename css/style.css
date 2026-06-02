@@ -1,4 +1,3 @@
-/* her site styles. mostly just made it up as i went lol */
 @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;1,9..144,500&family=Nunito:wght@400;700&display=swap');
 
 :root {
@@ -27,7 +26,7 @@ body {
 
 #stage { position: relative; min-height: 100vh; }
 
-/* background image sits behind everything, with a dark layer so text reads */
+
 .bg-master {
   background-image: url('../resources/•••.jpeg');
   background-size: cover;
@@ -56,7 +55,6 @@ body {
   transform: scale(1);
 }
 
-/* the wobbly hand drawn looking box. the weird border-radius is on purpose */
 .cutesy-box {
   background: var(--paper);
   backdrop-filter: blur(14px);
@@ -299,7 +297,7 @@ body {
 
 /* carousel (used by the meme dump at the end) */
 .ig-post {
-  width: 100%; max-width: 520px; background: #fffdfa;
+  width: 100%; max-width: 380px; background: #fffdfa;
   border: 3px solid var(--ink); border-radius: 20px; overflow: hidden;
   box-shadow: 6px 6px 0 var(--ink); position: relative; z-index: 2;
 }
@@ -312,8 +310,8 @@ body {
   background: linear-gradient(45deg, var(--accent), #ffc06e); border: 2px solid var(--ink);
 }
 .ig-handle { font-weight: 700; font-size: 0.95rem; font-family: var(--body); }
-/* 4:5 like an instagram portrait post. contain so the whole meme shows */
-.ig-frame { position: relative; width: 100%; aspect-ratio: 4/5; overflow: hidden; background: #000; }
+/* Scaled down to a balanced 1:1 square frame so the carousel feels compact */
+.ig-frame { position: relative; width: 100%; aspect-ratio: 1 / 1; overflow: hidden; background: #000; }
 .ig-track { display: flex; height: 100%; width: 100%; transition: transform 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
 .ig-slide { min-width: 100%; height: 100%; }
 .ig-slide img { width: 100%; height: 100%; object-fit: contain; display: block; }
