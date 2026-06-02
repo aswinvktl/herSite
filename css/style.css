@@ -47,11 +47,13 @@ body {
   align-items: center; justify-content: center;
   padding: 24px;
   opacity: 0;
-  transition: opacity .45s ease;
+  transform: scale(0.985);
+  transition: opacity .7s ease, transform .7s ease;
 }
 .screen.is-active {
   display: flex;
   opacity: 1;
+  transform: scale(1);
 }
 
 /* the wobbly hand drawn looking box. the weird border-radius is on purpose */
@@ -109,8 +111,8 @@ body {
 /* stuff fades up when its given .show */
 .reveal-item {
   opacity: 0;
-  transform: translateY(15px);
-  transition: opacity 0.6s ease, transform 0.6s ease;
+  transform: translateY(18px);
+  transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
 }
 .reveal-item.show {
   opacity: 1;
@@ -297,7 +299,7 @@ body {
 
 /* carousel (used by the meme dump at the end) */
 .ig-post {
-  width: 100%; max-width: 440px; background: #fffdfa;
+  width: 100%; max-width: 520px; background: #fffdfa;
   border: 3px solid var(--ink); border-radius: 20px; overflow: hidden;
   box-shadow: 6px 6px 0 var(--ink); position: relative; z-index: 2;
 }
@@ -310,10 +312,11 @@ body {
   background: linear-gradient(45deg, var(--accent), #ffc06e); border: 2px solid var(--ink);
 }
 .ig-handle { font-weight: 700; font-size: 0.95rem; font-family: var(--body); }
-.ig-frame { position: relative; width: 100%; aspect-ratio: 1/1; overflow: hidden; background: #000; }
+/* 4:5 like an instagram portrait post. contain so the whole meme shows */
+.ig-frame { position: relative; width: 100%; aspect-ratio: 4/5; overflow: hidden; background: #000; }
 .ig-track { display: flex; height: 100%; width: 100%; transition: transform 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
 .ig-slide { min-width: 100%; height: 100%; }
-.ig-slide img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.ig-slide img { width: 100%; height: 100%; object-fit: contain; display: block; }
 .ig-arrow { position: absolute; top: 50%; transform: translateY(-50%); width: 38px; height: 38px; border-radius: 50%; border: none; background: rgba(255,255,255,0.85); font-size: 1.6rem; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.2); z-index: 5; }
 .ig-prev { left: 10px; } .ig-next { right: 10px; }
 .ig-dots { display: flex; gap: 6px; justify-content: center; padding: 12px; flex-wrap: wrap; }
