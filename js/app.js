@@ -1,13 +1,13 @@
 // her site lol
-// ok so everything is just screens that get show()'d one at a time
-// dont touch the order array at the bottom or it all breaks
+// everything is just screens that get show()'d one at a time
+// dont touch the order array at the bottom or it all breaks i swear
 
 const state = { day: null, time: null, food: null, note: "" };
-let currentScreen = "ask1";
+let currentScreen = "landing";
 let videoDone = false;
 
 
-// browsers wont let it autoplay ffs
+// browsers wont let it autoplay ffs. so just kick it off on the first click
 const bgMusic = document.getElementById("bgMusic");
 let musicStarted = false;
 function startMusic() {
@@ -42,6 +42,7 @@ function show(name) {
   });
   window.scrollTo(0, 0);
 
+  if (name === "landing") runLandingSequence();
   if (name === "ask1") runScreen1aSequence();
   if (name === "ask2") runScreen1bSequence();
   if (name === "afteryes") runYesSequence();
@@ -51,9 +52,36 @@ function show(name) {
   if (name === "food") runFoodScreenSequence();
   if (name === "addask") runAddAskScreenSequence();
   if (name === "summary") runSummaryScreenSequence();
+  if (name === "memedump") runMemeDumpSequence();
 
   updateNav();
 }
+
+// landing arrow shows up after a sec
+function runLandingSequence() {
+  const arrow = document.getElementById("landingArrowReveal");
+  arrow.classList.remove("show");
+  setTimeout(() => {
+    if (currentScreen === "landing") arrow.classList.add("show");
+  }, 600);
+}
+
+// intro buttons
+document.getElementById("landingBtn").addEventListener("click", () => { show("instructions"); });
+
+// instructions page. she has to tick both or she aint going anywhere
+const chk1 = document.getElementById("chk1");
+const chk2 = document.getElementById("chk2");
+document.getElementById("instructionsBtn").addEventListener("click", () => {
+  if (chk1.checked && chk2.checked) {
+    show("ready");
+  } else {
+    // tick the boxes pls
+    alert("tick both boxes first 😤");
+  }
+});
+
+document.getElementById("readyBtn").addEventListener("click", () => { show("ask1"); });
 
 // little delay so the arrow doesnt just slam in
 function runScreen1aSequence() {
@@ -77,7 +105,7 @@ function runScreen1bSequence() {
   setTimeout(() => { if (currentScreen === "ask2") buttons.classList.add("show"); }, 2000);
 }
 
-// the no button runs away plus wicked lady 
+// the no button runs away plus wicked lady
 const noRegion = document.getElementById("noRegion");
 const cynthiaScare = document.getElementById("cynthiaScare");
 
@@ -168,15 +196,15 @@ function runYesSequence() {
 }
 
 // thurs and sunday are the good ones. fri/sat get rejected and she has to pick again
-// the illusion of choice. show memes all the time 
+// the illusion of choice. show memes all the time
 const dateReaction = document.getElementById("dateReaction");
 const dayReact = document.getElementById("dayReact");
 const dateNextBtnReveal = document.getElementById("dateNextBtnReveal");
 let badDayTimer = null;
 
 const DAYS = {
-  "Thursday 04 June": { good: true, img: "resources/a.jpeg", caption: "great choice" },
-  "Sunday 07 June": { good: true, img: "resources/901ad9ad498cae6cbc137b6b57c9f012(3).jpg", caption: "THE BESTEST CHOICE. look at you being decisive hahahahahah" },
+  "Thursday 04 June": { good: true, img: "resources/a.jpeg", caption: "the best choice, look at you being decisive hahaha" },
+  "Sunday 07 June": { good: true, img: "resources/a.jpeg", caption: "the best choice, look at you being decisive hahaha" },
   "Friday 05 June": { good: false, img: "resources/8cef642481853f378a453a318ef7f205(3).jpg", caption: "we are working" },
   "Saturday 06 June": { good: false, img: "resources/f38bc75959b15a509d0d0c1a7c11dc88.jpg", caption: "too busy, too many people" },
 };
@@ -236,7 +264,7 @@ document.querySelectorAll('[data-choice="day"]').forEach(btn => {
   });
 });
 
-// time 
+// time
 const timeReaction = document.getElementById("timeReaction");
 const timeReact = document.getElementById("timeReact");
 const timeNextBtnReveal = document.getElementById("timeNextBtnReveal");
@@ -336,7 +364,8 @@ const foodNextBtnReveal = document.getElementById("foodNextBtnReveal");
 const FOOD_RESPONSES = {
   "Italian": "i was thinking the same",
   "Japanese": "that is a reaaaalyyy gooood choice",
-  "Mediterranean": "that is great choice"
+  "Mediterranean": "that is great choice",
+  "Spanish / South American": "oooh spicy pick, i like it"
 };
 
 function runFoodScreenSequence() {
@@ -437,7 +466,7 @@ document.getElementById("noteOpenBtn").addEventListener("click", () => {
   noteBox.focus();
 });
 
-// just dumps her choices into the receipt. snap qr is a plain image in the html now. weitr something
+// just dumps her choices into the receipt. snap qr is a plain image in the html now. write something
 function runSummaryScreenSequence() {
   document.getElementById("summaryDay").textContent = state.day || "Selected Day";
   document.getElementById("summaryTime").textContent = state.time || "Selected Time";
@@ -450,6 +479,39 @@ function runSummaryScreenSequence() {
   } else {
     noteRow.style.display = "none";
   }
+}
+
+// the leftover memes she can swipe thru or just skip
+const dumpTrack = document.getElementById("dumpTrack");
+const dumpSlides = dumpTrack ? [...dumpTrack.children] : [];
+const dumpDots = document.getElementById("dumpDots");
+let dumpIndex = 0;
+
+function dumpRender() {
+  dumpTrack.style.transform = `translateX(-${dumpIndex * 100}%)`;
+  [...dumpDots.children].forEach((dot, idx) => dot.classList.toggle("on", idx === dumpIndex));
+}
+
+function runMemeDumpSequence() {
+  dumpIndex = 0;
+  dumpRender();
+}
+
+if (dumpTrack) {
+  dumpDots.innerHTML = "";
+  dumpSlides.forEach((_, idx) => {
+    const dotMark = document.createElement("span");
+    dotMark.className = "ig-dotmark" + (idx === 0 ? " on" : "");
+    dumpDots.appendChild(dotMark);
+  });
+  document.getElementById("dumpNext").addEventListener("click", () => {
+    dumpIndex = (dumpIndex + 1) % dumpSlides.length;
+    dumpRender();
+  });
+  document.getElementById("dumpPrev").addEventListener("click", () => {
+    dumpIndex = (dumpIndex - 1 + dumpSlides.length) % dumpSlides.length;
+    dumpRender();
+  });
 }
 
 // nav buttons
@@ -465,10 +527,13 @@ document.getElementById("dateNextBtn").addEventListener("click", () => { show("t
 document.getElementById("timeNextBtn").addEventListener("click", () => { show("timeout"); });
 document.getElementById("foodNextBtn").addEventListener("click", () => { show("addask"); });
 document.getElementById("addaskNextBtn").addEventListener("click", () => { show("summary"); });
+document.getElementById("summaryNextBtn").addEventListener("click", () => { show("memedump"); });
+document.getElementById("memedumpSkip").addEventListener("click", () => { show("sleep"); });
 
 // arrow
-const ORDER = ["ask1","ask2","afteryes","date","time","timeout","food","addask","summary"];
-const NAV_HIDDEN_ON = ["ask1","ask2","timeout","summary"];
+const ORDER = ["landing","instructions","ready","ask1","ask2","afteryes","date","time","timeout","food","addask","summary","memedump","sleep"];
+// hide the arrows on all the intro/outro screens + ones with their own button
+const NAV_HIDDEN_ON = ["landing","instructions","ready","ask1","ask2","timeout","summary","memedump","sleep"];
 const navBack = document.getElementById("navBack");
 const navFwd  = document.getElementById("navFwd");
 
@@ -506,4 +571,4 @@ navFwd.addEventListener("click", () => {
 });
 
 // go
-show("ask1");
+show("landing");

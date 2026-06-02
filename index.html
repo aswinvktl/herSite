@@ -17,7 +17,50 @@
   <button id="navBack" class="nav-arrow nav-back" aria-label="back" hidden>‹</button>
   <button id="navFwd" class="nav-arrow nav-fwd" aria-label="forward" hidden>›</button>
 
-<section class="screen is-active bg-master" data-screen="ask1">
+  <!-- landing -->
+  <section class="screen is-active bg-master" data-screen="landing">
+    <div class="cutesy-box">
+      <img class="day-gif" src="resources/9f813060b6eed6eb5420a1606f4a1d74.jpg" alt="" style="width: 240px; max-width: 60vw;" />
+      <h1 class="joke-q">how was your day?</h1>
+      <div class="reveal-item" id="landingArrowReveal" style="margin-top: 20px;">
+        <button class="arrow-next" id="landingBtn" aria-label="next">→</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- instructions (sheldon) -->
+  <section class="screen bg-master" data-screen="instructions">
+    <div class="cutesy-box">
+      <img class="day-gif" src="resources/a2e1d351814b9c0b3c5dabeb8ded9a8d(3).jpg" alt="" style="width: 220px; max-width: 55vw;" />
+      <h2 class="day-q" style="color: var(--ink); margin: 10px 0 20px;">a few house rules 🤓</h2>
+
+      <div class="instruction-row">
+        <input type="checkbox" id="chk1" class="chk" />
+        <label for="chk1">play around with the buttons, theres stuff hidden everywhere</label>
+      </div>
+      <div class="instruction-row">
+        <input type="checkbox" id="chk2" class="chk" />
+        <label for="chk2">turn your volume up (or pop some earphones in) 🎧</label>
+      </div>
+
+      <div class="reveal-item show" style="margin-top: 24px;">
+        <button class="btn btn-yes-next" id="instructionsBtn">got it →</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ready -->
+  <section class="screen bg-master" data-screen="ready">
+    <div class="cutesy-box">
+      <img class="day-gif" src="resources/cat-cute-gif-cat-cute-happy.gif" alt="" style="width: 220px; max-width: 55vw;" />
+      <h1 class="joke-q">are you ready?</h1>
+      <div class="reveal-item show" style="margin-top: 22px;">
+        <button class="btn btn-yes" id="readyBtn" style="right: 0; font-size: 1.8rem;">start</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="screen bg-master" data-screen="ask1">
     <div class="cutesy-box">
       <h1 class="joke-q">Why did the calendar feel proud?</h1>
       <div class="reveal-item" id="arrowReveal">
@@ -139,6 +182,7 @@
         <button class="opt" data-choice="food" data-value="Italian">Italian</button>
         <button class="opt" data-choice="food" data-value="Japanese">Japanese</button>
         <button class="opt" data-choice="food" data-value="Mediterranean">Mediterranean</button>
+        <button class="opt" data-choice="food" data-value="Spanish / South American">Spanish / South American</button>
         <button class="opt opt-other" data-choice="food" data-value="__other__">something else…</button>
       </div>
 
@@ -215,6 +259,56 @@
         <p style="font-family: var(--body); font-size: 0.9rem; font-weight: 700; color: var(--ink); margin-top: 12px; max-width: 280px; line-height: 1.4;">click a picture of this page and send it to me</p>
       </div>
 
+      <div class="reveal-item show" style="margin-top: 22px;">
+        <button class="btn btn-yes-next" id="summaryNextBtn" style="font-size: 1rem; padding: 8px 24px;">one more thing →</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- meme dump. just leftover memes i liked -->
+  <section class="screen bg-master" data-screen="memedump">
+    <div class="ig-post">
+      <div class="ig-head">
+        <span class="ig-dot"></span>
+        <span class="ig-handle">memes_i_couldnt_fit_in</span>
+      </div>
+
+      <div class="ig-frame">
+        <div class="ig-track" id="dumpTrack">
+          <div class="ig-slide"><img src="resources/7f29d3fea535a55a0fea83e44bb23b95(3).jpg" alt="" /></div>
+          <div class="ig-slide"><img src="resources/97259bac9c6fe64b3b2e7010d5b854e3(3).jpg" alt="" /></div>
+          <div class="ig-slide"><img src="resources/4c91918fed9ee6e5b2bd296d9465256b(3).jpg" alt="" /></div>
+          <div class="ig-slide"><img src="resources/9eabdfac7799fe9adba9bae786d29639(1).jpg" alt="" /></div>
+          <div class="ig-slide"><img src="resources/99f4f249786b1511e315657c45f2fcb5(3).jpg" alt="" /></div>
+          <div class="ig-slide"><img src="resources/688550062_18053016599723430_6168281560926484537_n.jpeg" alt="" /></div>
+          <div class="ig-slide"><img src="resources/694271763_18053016641723430_8893138547901554807_n.jpeg" alt="" /></div>
+          <div class="ig-slide"><img src="resources/aa1f7ea41225365dfb5f6f18b3feb62d(7).jpg" alt="" /></div>
+          <div class="ig-slide"><img src="resources/affirmations croh _3.jpeg" alt="" /></div>
+          <div class="ig-slide"><img src="resources/bcf7c2ffa948ca863e49e6a21bad5121(7).jpg" alt="" /></div>
+          <div class="ig-slide"><img src="resources/before.jpg" alt="" /></div>
+          <div class="ig-slide"><img src="resources/caf91e7b03d220387267f110147350e6(2).jpg" alt="" /></div>
+          <div class="ig-slide"><img src="resources/cam.jpg" alt="" /></div>
+          <div class="ig-slide"><img src="resources/catmeme.jpeg" alt="" /></div>
+          <div class="ig-slide"><img src="resources/catrose.jpg" alt="" /></div>
+          <div class="ig-slide"><img src="resources/d44dfeb6fe122bbd6d2de962874cb11f(3).jpg" alt="" /></div>
+          <div class="ig-slide"><img src="resources/e71ca4e55ec205ae765f7f54d0e701ec(3).jpg" alt="" /></div>
+          <div class="ig-slide"><img src="resources/f39e89e5b7ff64793002a43666c62d0f(3).jpg" alt="" /></div>
+        </div>
+        <button class="ig-arrow ig-prev" id="dumpPrev" aria-label="prev">‹</button>
+        <button class="ig-arrow ig-next" id="dumpNext" aria-label="next">›</button>
+      </div>
+
+      <div class="ig-dots" id="dumpDots"></div>
+      <p style="font-family: var(--body); font-weight: 700; color: var(--ink); margin: 4px 14px 10px; font-size: 0.9rem;">here are some memes, enjoy 🤭</p>
+      <button class="btn btn-yes-next" id="memedumpSkip" style="margin: 0 auto 16px; display: block; font-size: 1rem; padding: 8px 24px;">okay im done →</button>
+    </div>
+  </section>
+
+  <!-- the very end -->
+  <section class="screen bg-starry" data-screen="sleep">
+    <div class="cutesy-box">
+      <img class="day-gif" src="resources/sleep cat.jpeg" alt="" style="width: 240px; max-width: 60vw;" />
+      <h1 class="joke-q">sleep tight 🌙</h1>
     </div>
   </section>
 

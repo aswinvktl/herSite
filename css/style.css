@@ -269,3 +269,53 @@ body {
 .day-react { display: block; margin: 18px auto 0; width: 280px; max-width: 70vw; border-radius: 14px; box-shadow: 0 12px 40px rgba(0,0,0,0.35); }
 
 .textfield { background: #fffdfa; color: var(--ink); font-family: var(--body); font-size: 1rem; text-align: center; }
+
+/* starry night bg for the very last page */
+.bg-starry {
+  background-image: url('../resources/Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg');
+  background-size: cover;
+  background-position: center;
+}
+.bg-starry::before {
+  content: "";
+  position: absolute; inset: 0;
+  background: rgba(0,0,0,0.35);
+  z-index: 0;
+}
+
+/* the tickbox rows on the instructions page */
+.instruction-row {
+  display: flex; align-items: center; gap: 12px;
+  text-align: left; margin: 14px auto; max-width: 420px;
+  font-family: var(--body); font-weight: 700; color: var(--ink);
+}
+.chk {
+  width: 22px; height: 22px; flex-shrink: 0;
+  accent-color: var(--accent); cursor: pointer;
+}
+.instruction-row label { cursor: pointer; }
+
+/* carousel (used by the meme dump at the end) */
+.ig-post {
+  width: 100%; max-width: 440px; background: #fffdfa;
+  border: 3px solid var(--ink); border-radius: 20px; overflow: hidden;
+  box-shadow: 6px 6px 0 var(--ink); position: relative; z-index: 2;
+}
+.ig-head {
+  display: flex; align-items: center; gap: 10px;
+  padding: 12px 14px; border-bottom: 2.5px solid var(--ink); background: var(--paper);
+}
+.ig-dot {
+  width: 24px; height: 24px; border-radius: 50%;
+  background: linear-gradient(45deg, var(--accent), #ffc06e); border: 2px solid var(--ink);
+}
+.ig-handle { font-weight: 700; font-size: 0.95rem; font-family: var(--body); }
+.ig-frame { position: relative; width: 100%; aspect-ratio: 1/1; overflow: hidden; background: #000; }
+.ig-track { display: flex; height: 100%; width: 100%; transition: transform 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
+.ig-slide { min-width: 100%; height: 100%; }
+.ig-slide img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.ig-arrow { position: absolute; top: 50%; transform: translateY(-50%); width: 38px; height: 38px; border-radius: 50%; border: none; background: rgba(255,255,255,0.85); font-size: 1.6rem; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.2); z-index: 5; }
+.ig-prev { left: 10px; } .ig-next { right: 10px; }
+.ig-dots { display: flex; gap: 6px; justify-content: center; padding: 12px; flex-wrap: wrap; }
+.ig-dotmark { width: 7px; height: 7px; border-radius: 50%; background: #d9b9c4; transition: background 0.2s ease; }
+.ig-dotmark.on { background: var(--accent); }
