@@ -43,6 +43,7 @@ function show(name) {
   window.scrollTo(0, 0);
 
   if (name === "landing") runLandingSequence();
+  if (name === "instructions") runInstructionsSequence();
   if (name === "ask1") runScreen1aSequence();
   if (name === "ask2") runScreen1bSequence();
   if (name === "afteryes") runYesSequence();
@@ -57,17 +58,38 @@ function show(name) {
   updateNav();
 }
 
-// landing arrow shows up after a sec
+// landing. cat fades in first, then the hello, then the arrow
 function runLandingSequence() {
+  const img = document.getElementById("landingImgReveal");
+  const text = document.getElementById("landingTextReveal");
   const arrow = document.getElementById("landingArrowReveal");
-  arrow.classList.remove("show");
-  setTimeout(() => {
-    if (currentScreen === "landing") arrow.classList.add("show");
-  }, 600);
+
+  [img, text, arrow].forEach(el => el.classList.remove("show"));
+
+  setTimeout(() => { if (currentScreen === "landing") img.classList.add("show"); }, 200);
+  setTimeout(() => { if (currentScreen === "landing") text.classList.add("show"); }, 1000);
+  setTimeout(() => { if (currentScreen === "landing") arrow.classList.add("show"); }, 1700);
 }
 
 // intro buttons
 document.getElementById("landingBtn").addEventListener("click", () => { show("instructions"); });
+
+// sheldon first, then the heading, then the boxes one by one, then the button
+function runInstructionsSequence() {
+  const img = document.getElementById("instrImgReveal");
+  const head = document.getElementById("instrHeadReveal");
+  const row1 = document.getElementById("instrRow1");
+  const row2 = document.getElementById("instrRow2");
+  const btn = document.getElementById("instrBtnReveal");
+
+  [img, head, row1, row2, btn].forEach(el => el.classList.remove("show"));
+
+  setTimeout(() => { if (currentScreen === "instructions") img.classList.add("show"); }, 200);
+  setTimeout(() => { if (currentScreen === "instructions") head.classList.add("show"); }, 1000);
+  setTimeout(() => { if (currentScreen === "instructions") row1.classList.add("show"); }, 1500);
+  setTimeout(() => { if (currentScreen === "instructions") row2.classList.add("show"); }, 1900);
+  setTimeout(() => { if (currentScreen === "instructions") btn.classList.add("show"); }, 2400);
+}
 
 // instructions page. she has to tick both or she aint going anywhere
 const chk1 = document.getElementById("chk1");
@@ -376,6 +398,7 @@ function runFoodScreenSequence() {
   foodNextBtnReveal.classList.remove("show");
   foodOther.style.display = "none";
   foodOther.value = "";
+  document.getElementById("foodOtherHint").hidden = true;
   foodReact.style.display = "none";
   foodReaction.textContent = "";
 
@@ -401,6 +424,7 @@ document.querySelectorAll('[data-choice="food"]').forEach(btn => {
     if (val === "__other__") {
       foodOther.style.display = "block";
       foodOther.focus();
+      document.getElementById("foodOtherHint").hidden = false;
       foodReaction.textContent = "";
       foodReact.style.display = "none";
       foodNextBtnReveal.classList.remove("show");
@@ -410,21 +434,36 @@ document.querySelectorAll('[data-choice="food"]').forEach(btn => {
     }
 
     foodOther.style.display = "none";
+    document.getElementById("foodOtherHint").hidden = true;
     state.food = val;
     triggerFoodFeedback(FOOD_RESPONSES[val] || "great choice");
   });
 });
 
+// just track what she types, dont show peppa yet
 foodOther.addEventListener("input", () => {
   const inputVal = foodOther.value.trim();
   state.food = inputVal || null;
-  if (inputVal) {
-    triggerFoodFeedback("that is a reaaaalyyy gooood choice");
-  } else {
+  // if she clears it after submitting, hide peppa again
+  if (!inputVal) {
     foodReact.style.display = "none";
     foodNextBtnReveal.classList.remove("show");
     foodReaction.textContent = "";
     updateNav();
+  }
+});
+
+// peppa only pops once she actually hits enter
+foodOther.addEventListener("keydown", (e) => {
+  if (e.key === "Enter") {
+    e.preventDefault();
+    const inputVal = foodOther.value.trim();
+    if (inputVal) {
+      state.food = inputVal;
+      document.getElementById("foodOtherHint").hidden = true;
+      foodOther.blur();
+      triggerFoodFeedback("that is a reaaaalyyy gooood choice");
+    }
   }
 });
 

@@ -20,8 +20,10 @@
   <!-- landing -->
   <section class="screen is-active bg-master" data-screen="landing">
     <div class="cutesy-box">
-      <img class="day-gif" src="resources/cat.jpg" alt="" style="width: 240px; max-width: 60vw;" />
-      <h1 class="joke-q">Hello</h1>
+      <div class="reveal-item" id="landingImgReveal">
+        <img class="day-gif" src="resources/cat.jpg" alt="" style="width: 240px; max-width: 60vw;" />
+      </div>
+      <h1 class="joke-q reveal-item" id="landingTextReveal" style="margin-top: 10px;">hello!! 👋</h1>
       <div class="reveal-item" id="landingArrowReveal" style="margin-top: 20px;">
         <button class="arrow-next" id="landingBtn" aria-label="next">→</button>
       </div>
@@ -31,19 +33,21 @@
   <!-- instructions (sheldon) -->
   <section class="screen bg-master" data-screen="instructions">
     <div class="cutesy-box">
-      <img class="day-gif" src="resources/a2e1d351814b9c0b3c5dabeb8ded9a8d(3).jpg" alt="" style="width: 220px; max-width: 55vw;" />
-      <h2 class="day-q" style="color: var(--ink); margin: 10px 0 20px;">Before we begin:</h2>
+      <div class="reveal-item" id="instrImgReveal">
+        <img class="day-gif" src="resources/a2e1d351814b9c0b3c5dabeb8ded9a8d(3).jpg" alt="" style="width: 220px; max-width: 55vw;" />
+      </div>
+      <h2 class="day-q reveal-item" id="instrHeadReveal" style="color: var(--ink); margin: 10px 0 20px;">Before we begin:</h2>
 
-      <div class="instruction-row">
+      <div class="instruction-row reveal-item" id="instrRow1">
         <input type="checkbox" id="chk1" class="chk" />
         <label for="chk1">play around with the buttons, theres stuff hidden everywhere</label>
       </div>
-      <div class="instruction-row">
+      <div class="instruction-row reveal-item" id="instrRow2">
         <input type="checkbox" id="chk2" class="chk" />
         <label for="chk2">turn your volume up (or pop some earphones in) 🎧</label>
       </div>
 
-      <div class="reveal-item show" style="margin-top: 24px;">
+      <div class="reveal-item" id="instrBtnReveal" style="margin-top: 24px;">
         <button class="btn btn-yes-next" id="instructionsBtn">got it →</button>
       </div>
     </div>
@@ -186,7 +190,8 @@
         <button class="opt opt-other" data-choice="food" data-value="__other__">something else…</button>
       </div>
 
-      <input type="text" id="foodOther" class="textfield" hidden placeholder="go on then, what are we craving?" maxlength="80" style="width: 100%; max-width: 320px; margin: 12px auto; padding: 10px; border: 2px solid var(--ink); border-radius: 12px; font-family: var(--body); display: none;" />
+      <input type="text" id="foodOther" class="textfield" hidden placeholder="what else?" maxlength="80" style="width: 100%; max-width: 320px; margin: 12px auto 4px; padding: 10px; border: 2px solid var(--ink); border-radius: 12px; font-family: var(--body); display: none;" />
+      <p id="foodOtherHint" class="reaction" hidden style="font-size: 0.9rem; margin: 0 0 8px;">press enter ↵</p>
 
       <p class="reaction" id="foodReaction"></p>
       <img class="day-react" id="foodReact" src="resources/peppa.jpg" alt="" style="display: none;" />
